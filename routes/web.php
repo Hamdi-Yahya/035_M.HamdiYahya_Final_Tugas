@@ -65,7 +65,7 @@ Route::get('/anggota', function () {
     ];
 
     return view('anggota.index', compact('anggota_list'));
-});
+}) ->name('anggota.index');
 
 Route::get('/anggota/{id}', function ($id) {
     // Detail anggota 
@@ -122,10 +122,10 @@ Route::get('/anggota/{id}', function ($id) {
 
     return view('anggota.show', compact('anggota'));
 
-});
+}) ->name('anggota.show');
+
 
 // Route kategori
-Route::get('/kategori', [KategoriController::class, 'index']);
-Route::get('/kategori/search/{keyword}', [KategoriController::class, 'search']);
-Route::get('/kategori/{id}', [KategoriController::class, 'show']);
-
+Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+Route::get('/kategori/search/{keyword}', [KategoriController::class, 'search'])->name('kategori.search');
+Route::get('/kategori/{id}', [KategoriController::class, 'show'])->name('kategori.show');
