@@ -160,10 +160,14 @@
                 
                 <hr>
                 
-                <form action="{{ route('buku.destroy', $buku->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
+                {{-- Delete Button dengan SweetAlert --}}
+                <form action="{{ route('buku.destroy', $buku->id) }}" 
+                      method="POST" 
+                      class="delete-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger w-100">
+                    <button type="button" class="btn btn-danger w-100 btn-delete" 
+                            data-judul="{{ $buku->judul }}">
                         <i class="bi bi-trash"></i> Hapus Buku
                     </button>
                 </form>
@@ -235,4 +239,32 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    // SweetAlert confirmation untuk delete
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const judul = this.getAttribute('data-judul');
+            
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus buku "${judul}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
 @endsection

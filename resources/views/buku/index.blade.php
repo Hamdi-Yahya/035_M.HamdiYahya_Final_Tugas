@@ -8,10 +8,20 @@
         <i class="bi bi-book"></i>
         Daftar Buku
     </h1>
-    <a href="{{ route('buku.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Tambah Buku
-    </a>
+        <div class="d-flex gap-2">
+        <button type="submit" form="bulk-delete-form" class="btn btn-danger" id="btn-bulk-delete" style="display: none;">
+            <i class="bi bi-trash"></i> Hapus Terpilih (<span id="selected-count">0</span>)
+        </button>
+        {{-- Tombol Export CSV --}}
+        <a href="{{ route('buku.export') }}" class="btn btn-success">
+            <i class="bi bi-download"></i> Export CSV
+        </a>
+        <a href="{{ route('buku.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tambah Buku
+        </a>
+    </div>
 </div>
+
  
 {{-- Statistik Cards --}}
 <div class="row mb-4">
@@ -157,12 +167,31 @@
     </div>
 </div>
  
+{{-- Form Bulk Delete (terpisah agar tidak nested dengan form delete individual) --}}
+<form id="bulk-delete-form" action="{{ route('buku.bulk-delete') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
+{{-- Checkbox Select All --}}
+@if($bukus->count() > 0)
+<div class="mb-3">
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="select-all">
+        <label class="form-check-label fw-bold" for="select-all">Pilih Semua</label>
+    </div>
+</div>
+@endif
+
 {{-- Daftar Buku --}}
 @forelse ($bukus as $buku)
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-2 text-center">
+                    {{-- Checkbox untuk bulk delete --}}
+                    <div class="form-check d-flex justify-content-center mb-2">
+                        <input type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" class="form-check-input buku-checkbox">
+                    </div>
                     <i class="bi bi-book text-primary" style="font-size: 4rem;"></i>
                     <div class="mt-2">
                         <span class="badge bg-{{ $buku->kategori == 'Programming' ? 'primary' : ($buku->kategori == 'Database' ? 'success' : ($buku->kategori == 'Web Design' ? 'info' : ($buku->kategori == 'Networking' ? 'warning' : 'danger'))) }}">
@@ -224,6 +253,19 @@
                         <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i> Edit
                         </a>
+
+                        {{-- Delete Button dengan SweetAlert --}}
+                        <form action="{{ route('buku.destroy', $buku->id) }}" 
+                            method="POST" 
+                            class="d-inline delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-sm btn-danger w-100 btn-delete" 
+                                    data-judul="{{ $buku->judul }}">
+                                <i class="bi bi-trash"></i> Hapus
+                            </button>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -238,6 +280,7 @@
         @endisset
     </div>
 @endforelse
+
  
 @if ($bukus->count() > 0)
     <div class="text-center mt-4">
@@ -249,4 +292,118 @@
         </p>
     </div>
 @endif
+
+@push('scripts')
+<script>
+    // SweetAlert confirmation untuk delete
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const judul = this.getAttribute('data-judul');
+            
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus buku "${judul}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // Loading state saat submit form (kecuali delete-form)
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn && !this.classList.contains('delete-form')) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+            }
+        });
+    });
+
+        // Fungsi Select All checkbox
+    document.getElementById('select-all')?.addEventListener('change', function() {
+        // Centang/uncentang semua checkbox buku
+        document.querySelectorAll('input[name="buku_ids[]"]').forEach(cb => {
+            cb.checked = this.checked;
+        });
+        updateSelectedCount();
+    });
+
+    document.querySelectorAll('input[name="buku_ids[]"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            updateSelectedCount();
+
+            const allCheckboxes = document.querySelectorAll('input[name="buku_ids[]"]');
+            const checkedCheckboxes = document.querySelectorAll('input[name="buku_ids[]"]:checked');
+            const selectAll = document.getElementById('select-all');
+            if (selectAll) {
+                selectAll.checked = allCheckboxes.length === checkedCheckboxes.length;
+            }
+        });
+    });
+
+    function updateSelectedCount() {
+        const checkedCount = document.querySelectorAll('input[name="buku_ids[]"]:checked').length;
+        const btnBulkDelete = document.getElementById('btn-bulk-delete');
+        const selectedCount = document.getElementById('selected-count');
+
+        if (btnBulkDelete) {
+            btnBulkDelete.style.display = checkedCount > 0 ? 'inline-block' : 'none';
+        }
+        if (selectedCount) {
+            selectedCount.textContent = checkedCount;
+        }
+    }
+
+    // SweetAlert konfirmasi untuk bulk delete
+    document.getElementById('bulk-delete-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        const checked = document.querySelectorAll('input[name="buku_ids[]"]:checked');
+
+        if (checked.length === 0) {
+            Swal.fire('Peringatan', 'Pilih minimal satu buku untuk dihapus.', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: `Apakah Anda yakin ingin menghapus ${checked.length} buku yang dipilih?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hapus hidden input lama jika ada
+                form.querySelectorAll('input[name="buku_ids[]"]').forEach(el => el.remove());
+
+                // Tambahkan hidden input dari checkbox yang tercentang
+                checked.forEach(cb => {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = 'buku_ids[]';
+                    hidden.value = cb.value;
+                    form.appendChild(hidden);
+                });
+
+                form.submit();
+            }
+        });
+    });
+
+</script>
+@endpush
 @endsection
