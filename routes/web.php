@@ -31,6 +31,10 @@ Route::resource('buku', BukuController::class);
 
 Route::get('buku/kategori/{kategori}', [BukuController::class, 'filterKategori'])->name('buku.kategori');
 
+Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
+
+Route::get('/anggota/search', [AnggotaController::class, 'search'])->name('anggota.search');
+
 Route::resource('anggota', AnggotaController::class);
 
 // List all buku

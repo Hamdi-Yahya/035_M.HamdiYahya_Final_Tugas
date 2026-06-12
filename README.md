@@ -1,4 +1,4 @@
-# Tugas Pemrograman Web Pertemuan 12
+# Tugas Pemrograman Web Pertemuan 13
 
 ## Identitas
 - Nama: Muhammad Hamdi Yahya
@@ -10,28 +10,34 @@
 
 # Tugas yang dibuat
 
-## Tugas 1 - Validation Rules Advanced (30%)
-- Membuat Custom Validation Rule `KodeBukuFormat` dengan format: BK-[A-Z]{2,4}-[0-9]{3}
-- Contoh valid: BK-PROG-001, BK-DB-002
-- Conditional Validation: Jika kategori "Programming", bahasa harus "Inggris"
-- Conditional Validation: Jika tahun terbit < 2000, stok maksimal 5
-- Custom error messages dalam Bahasa Indonesia
+## Tugas 1 - Auto-Generate Kode Anggota (30%)
+- Implementasi auto-generate kode anggota dengan format: `AGT-[TAHUN]-[NOMOR_URUT]`
+- Contoh: AGT-2026-001, AGT-2026-002, AGT-2026-003
+- Helper function `generateKodeAnggota()` di `AnggotaController`
+- Nomor urut otomatis di-reset setiap pergantian tahun
+- Input kode anggota menjadi `readonly` (tidak bisa diedit manual)
+- Kode dikirim dari method `create()` ke view menggunakan `compact`
 
-## Tugas 2 - Bulk Delete Operations (35%)
-- Implementasi fitur delete multiple buku sekaligus
-- Checkbox per buku dan fitur "Pilih Semua" (Select All)
-- Tombol "Hapus Terpilih" dengan counter jumlah buku yang dipilih
-- Konfirmasi SweetAlert sebelum menghapus
-- Method `bulkDelete()` di `BukuController`
-- Route: `POST /buku/bulk-delete`
+## Tugas 2 - Export Anggota ke Excel (40%)
+- Implementasi fitur export data anggota ke file Excel (.xlsx)
+- Menggunakan package `maatwebsite/excel` (Laravel Excel)
+- Membuat Export Class `AnggotaExport` dengan `FromCollection` dan `WithHeadings`
+- Data yang diexport: Kode, Nama, Email, Telepon, Alamat, Tanggal Lahir, Jenis Kelamin, Pekerjaan, Status, Tanggal Daftar
+- Nama file otomatis dengan timestamp: `anggota_YYYY-MM-DD_HHmmss.xlsx`
+- Tombol "Export Excel" pada halaman daftar anggota
+- Method `export()` di `AnggotaController`
+- Route: `GET /anggota/export`
 
-## Tugas 3 - Export Buku ke CSV (35%)
-- Fitur export seluruh data buku ke file CSV
-- Tombol "Export CSV" pada halaman daftar buku
-- File CSV berisi: Kode Buku, Judul, Kategori, Pengarang, Penerbit, Tahun, ISBN, Harga, Stok
-- Nama file otomatis dengan timestamp: `buku_YYYY-MM-DD_HHmmss.csv`
-- Method `export()` di `BukuController`
-- Route: `GET /buku/export`
+## Tugas 3 - Advanced Search & Filter (30%)
+- Fitur pencarian dan filter advanced untuk data anggota
+- Filter berdasarkan keyword (nama, email, telepon)
+- Filter berdasarkan jenis kelamin (Laki-laki / Perempuan)
+- Filter berdasarkan status (Aktif / Nonaktif)
+- Filter berdasarkan pekerjaan (Mahasiswa / Pegawai / Wiraswasta)
+- Statistik otomatis menyesuaikan hasil pencarian
+- Tombol reset untuk menghapus semua filter
+- Method `search()` di `AnggotaController`
+- Route: `GET /anggota/search`
 
 ---
 
@@ -39,56 +45,37 @@
 
 > Semua screenshot disimpan di folder `image/`
 
-## 1. Validasi Format Kode Buku
-Menampilkan error validasi ketika format kode buku tidak sesuai format BK-XXX-000.
+## 1. Form Tambah Anggota - Kode Otomatis
+Menampilkan form tambah anggota dengan kode anggota yang di-generate otomatis (readonly).
 
-![Validasi Kode Buku](image/1.png)
-
----
-
-## 2. Validasi Conditional - Kategori Programming
-Menampilkan error validasi bahasa harus Inggris untuk kategori Programming.
-
-![Validasi Kategori Programming](image/2.png)
+![Auto Generate Kode Anggota](image/1.png)
 
 ---
 
-## 3. Validasi Conditional - Tahun Terbit < 2000
-Menampilkan error validasi stok maksimal 5 untuk buku terbitan sebelum tahun 2000.
+## 2. Tombol Export Excel
+Menampilkan tombol Export Excel pada halaman daftar anggota.
 
-![Validasi Tahun Terbit](image/3.png)
-
----
-
-## 4. Fitur Bulk Delete - Checkbox Select All
-Menampilkan fitur checkbox untuk memilih semua buku sekaligus.
-
-![Bulk Delete Checkbox](image/4.png)
+![Tombol Export Excel](image/3.png)
 
 ---
 
-## 5. Konfirmasi Bulk Delete
-Menampilkan popup konfirmasi SweetAlert sebelum menghapus buku terpilih.
+## 3. Hasil File Excel
+Menampilkan isi file Excel (.xlsx) yang berhasil diexport dengan data anggota.
 
-![Konfirmasi Bulk Delete](image/5.png)
-
----
-
-## 6. Hasil Bulk Delete
-Menampilkan pesan sukses setelah buku berhasil dihapus secara massal.
-
-![Hasil Bulk Delete](image/6.png)
+![Hasil File Excel](image/4.png)
 
 ---
 
-## 7. Tombol Export CSV
-Menampilkan tombol Export CSV pada halaman daftar buku.
+## 4. Form Search & Filter Advanced
+Menampilkan form pencarian dan filter advanced pada halaman daftar anggota.
 
-![Tombol Export CSV](image/7.png)
+![Form Search Filter](image/5.png)
 
 ---
 
-## 8. Hasil File CSV
-Menampilkan isi file CSV yang berhasil diexport.
+## 5. Hasil Pencarian 
+Menampilkan hasil pencarian anggota berdasarkan keyword nama/email/telepon.
 
-![Hasil File CSV](image/8.png)
+![Hasil Pencarian Keyword](image/6.png)
+
+---

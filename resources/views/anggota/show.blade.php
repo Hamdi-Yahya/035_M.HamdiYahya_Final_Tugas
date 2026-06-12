@@ -124,10 +124,14 @@
                     <i class="bi bi-arrow-left"></i> Kembali
                 </a>
                 <hr>
-                <form action="{{ route('anggota.destroy', $anggota->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                {{-- Delete Button dengan SweetAlert --}}
+                <form action="{{ route('anggota.destroy', $anggota->id) }}" 
+                      method="POST" 
+                      class="delete-form">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger w-100">
+                    <button type="button" class="btn btn-danger w-100 btn-delete" 
+                            data-nama="{{ $anggota->nama }}">
                         <i class="bi bi-trash"></i> Hapus Anggota
                     </button>
                 </form>
@@ -135,4 +139,35 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    /**
+     * SweetAlert confirmation untuk delete anggota di halaman detail
+     * Menampilkan dialog konfirmasi sebelum menghapus data anggota
+     */
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const nama = this.getAttribute('data-nama');
+            
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus anggota "${nama}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
 @endsection

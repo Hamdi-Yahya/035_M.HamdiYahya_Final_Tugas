@@ -8,9 +8,15 @@
         <i class="bi bi-people"></i>
         Daftar Anggota
     </h1>
-    <a href="{{ route('anggota.create') }}" class="btn btn-success">
-        <i class="bi bi-plus-circle"></i> Tambah Anggota
-    </a>
+    <div class="d-flex gap-2">
+        {{-- Tombol Export Excel --}}
+        <a href="{{ route('anggota.export') }}" class="btn btn-success">
+            <i class="bi bi-file-excel"></i> Export Excel
+        </a>
+        <a href="{{ route('anggota.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tambah Anggota
+        </a>
+    </div>
 </div>
  
 {{-- Statistik --}}
@@ -53,6 +59,54 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+{{-- Form Search & Filter Advanced --}}
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        <h6 class="card-title fw-bold mb-3">
+            <i class="bi bi-search"></i> Pencarian & Filter Advanced
+        </h6>
+        <form action="{{ route('anggota.search') }}" method="GET">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="keyword" class="form-control" 
+                           placeholder="Cari nama/email/telepon"
+                           value="{{ request('keyword') }}">
+                </div>
+                <div class="col-md-2">
+                    <select name="jenis_kelamin" class="form-select">
+                        <option value="">Semua Jenis Kelamin</option>
+                        <option value="Laki-laki" {{ request('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ request('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">Semua Status</option>
+                        <option value="Aktif" {{ request('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                        <option value="Nonaktif" {{ request('status') == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="pekerjaan" class="form-select">
+                        <option value="">Semua Pekerjaan</option>
+                        <option value="Mahasiswa" {{ request('pekerjaan') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                        <option value="Pegawai" {{ request('pekerjaan') == 'Pegawai' ? 'selected' : '' }}>Pegawai</option>
+                        <option value="Wiraswasta" {{ request('pekerjaan') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                    <a href="{{ route('anggota.index') }}" class="btn btn-outline-secondary flex-fill">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
  
@@ -111,17 +165,31 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('anggota.show', $anggota->id) }}" 
-                                       class="btn btn-sm btn-info text-white"
-                                       title="Detail">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('anggota.edit', $anggota->id) }}" 
-                                       class="btn btn-sm btn-warning"
-                                       title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
+                                <div class="d-grid gap-1">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('anggota.show', $anggota->id) }}" 
+                                           class="btn btn-sm btn-info text-white"
+                                           title="Detail">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ route('anggota.edit', $anggota->id) }}" 
+                                           class="btn btn-sm btn-warning"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+
+                                    {{-- Delete Button dengan SweetAlert --}}
+                                    <form action="{{ route('anggota.destroy', $anggota->id) }}" 
+                                          method="POST"
+                                          class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-sm btn-danger w-100 btn-delete" 
+                                                data-nama="{{ $anggota->nama }}">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -138,4 +206,49 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    /**
+     * SweetAlert confirmation untuk delete individual anggota
+     * Menampilkan dialog konfirmasi sebelum menghapus data anggota
+     */
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const nama = this.getAttribute('data-nama');
+            
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus anggota "${nama}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    /**
+     * Loading state saat submit form (kecuali delete-form)
+     * Mencegah double submit dengan menonaktifkan tombol submit
+     */
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn && !this.classList.contains('delete-form')) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+            }
+        });
+    });
+</script>
+@endpush
 @endsection
