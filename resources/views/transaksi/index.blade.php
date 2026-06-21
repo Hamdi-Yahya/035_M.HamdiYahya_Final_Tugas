@@ -12,9 +12,14 @@
                     <i class="bi bi-arrow-left-right"></i>
                     Daftar Transaksi Peminjaman
                 </h1>
-                <a href="{{ route('transaksi.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Pinjam Buku
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('transaksi.laporan') }}" class="btn btn-danger">
+                        <i class="bi bi-file-earmark-pdf"></i> Laporan
+                    </a>
+                    <a href="{{ route('transaksi.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Pinjam Buku
+                    </a>
+                </div>
             </div>
 
             {{-- Statistik --}}
