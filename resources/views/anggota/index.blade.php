@@ -1,8 +1,12 @@
-@extends('layouts.app')
- 
-@section('title', 'Daftar Anggota')
- 
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Daftar Anggota') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>
         <i class="bi bi-people"></i>
@@ -251,4 +255,6 @@
     });
 </script>
 @endpush
-@endsection
+        </div>
+    </div>
+</x-app-layout>

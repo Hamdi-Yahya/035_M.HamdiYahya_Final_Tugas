@@ -113,4 +113,9 @@ class Anggota extends Model
                      ->whereYear('tanggal_daftar', now()->year);
     }
 
+    public function transaksis()
+{
+    return $this->hasMany(Transaksi::class);
+}
+
 }

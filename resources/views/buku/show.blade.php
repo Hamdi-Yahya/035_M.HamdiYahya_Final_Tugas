@@ -1,14 +1,18 @@
-@extends('layouts.app')
- 
-@section('title', $buku->judul)
- 
-@section('content')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Detail Buku') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 <div class="row">
     {{-- Breadcrumb --}}
     <div class="col-12 mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('buku.index') }}">Buku</a></li>
                 <li class="breadcrumb-item active">{{ $buku->judul }}</li>
             </ol>
@@ -267,4 +271,6 @@
     });
 </script>
 @endpush
-@endsection
+        </div>
+    </div>
+</x-app-layout>

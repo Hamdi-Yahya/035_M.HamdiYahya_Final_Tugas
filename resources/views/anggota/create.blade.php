@@ -1,12 +1,16 @@
-@extends('layouts.app')
- 
-@section('title', 'Tambah Anggota')
- 
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Tambah Anggota') }}
+        </h2>
+    </x-slot>
+
 @push('styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
- 
-@section('content')
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 <div class="row justify-content-center">
     <div class="col-md-10">
         <div class="card">
@@ -213,8 +217,7 @@
         </div>
     </div>
 </div>
-@endsection
- 
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
@@ -245,3 +248,6 @@
     });
 </script>
 @endpush
+        </div>
+    </div>
+</x-app-layout>

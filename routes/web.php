@@ -1,258 +1,48 @@
 <?php
-
-use App\Http\Controllers\AnggotaController;
+ 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BukuController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Buku;
-use App\Models\Anggota;
  
+// Public routes (tanpa auth)
 Route::get('/', function () {
-    return view('home');
-})->name('home');
-
-// Route::get('buku', function () {
-//     return view('buku');
-// })->name('buku.index');
-
-// Route::get('anggota', function () {
-//     return view('anggota');
-// })->name('anggota.index');
- 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-Route::get('/buku/search', [BukuController::class, 'search'])->name('buku.search');
-
-Route::post('/buku/bulk-delete', [BukuController::class, 'bulkDelete'])->name('buku.bulk-delete');
-
-Route::get('/buku/export', [BukuController::class, 'export'])->name('buku.export');
-
-Route::resource('buku', BukuController::class);
-
-Route::get('buku/kategori/{kategori}', [BukuController::class, 'filterKategori'])->name('buku.kategori');
-
-Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
-
-Route::get('/anggota/search', [AnggotaController::class, 'search'])->name('anggota.search');
-
-Route::resource('anggota', AnggotaController::class);
-
-// List all buku
-// Route::get('/buku', function () {
-//     $bukus = Buku::all();
-    
-//     $html = '<h1>Daftar Buku</h1>';
-//     $html .= '<a href="/buku/create">Tambah Buku</a><br /><br />';
-//     $html .= '<table border="1" cellpadding="10">';
-//     $html .= '<tr>
-//                 <th>ID</th>
-//                 <th>Kode</th>
-//                 <th>Judul</th>
-//                 <th>Kategori</th>
-//                 <th>Harga</th>
-//                 <th>Stok</th>
-//                 <th>Aksi</th>
-//               </tr>';
-    
-//     foreach ($bukus as $buku) {
-//         $html .= '<tr>';
-//         $html .= '<td>' . $buku->id . '</td>';
-//         $html .= '<td>' . $buku->kode_buku . '</td>';
-//         $html .= '<td>' . $buku->judul . '</td>';
-//         $html .= '<td>' . $buku->kategori . '</td>';
-//         $html .= '<td>' . $buku->harga_format . '</td>';
-//         $html .= '<td>' . $buku->stok . '</td>';
-//         $html .= '<td>
-//                     <a href="/buku/' . $buku->id . '">Detail</a> | 
-//                     <a href="/buku/' . $buku->id . '/edit">Edit</a>
-//                   </td>';
-//         $html .= '</tr>';
-//     }
-    
-//     $html .= '</table>';
-    
-//     return $html;
-// })->name('buku.index');;
- 
-// Show single buku
-Route::get('/buku/{id}', function ($id) {
-    $buku = Buku::findOrFail($id);
-    
-    $html = '<h1>Detail Buku</h1>';
-    $html .= '<a href="/buku">Kembali</a><br /><br />';
-    $html .= '<table border="1" cellpadding="10">';
-    $html .= '<tr><th>Field</th><th>Value</th></tr>';
-    $html .= '<tr><td>ID</td><td>' . $buku->id . '</td></tr>';
-    $html .= '<tr><td>Kode Buku</td><td>' . $buku->kode_buku . '</td></tr>';
-    $html .= '<tr><td>Judul</td><td>' . $buku->judul . '</td></tr>';
-    $html .= '<tr><td>Kategori</td><td>' . $buku->kategori . '</td></tr>';
-    $html .= '<tr><td>Pengarang</td><td>' . $buku->pengarang . '</td></tr>';
-    $html .= '<tr><td>Penerbit</td><td>' . $buku->penerbit . '</td></tr>';
-    $html .= '<tr><td>Tahun</td><td>' . $buku->tahun_terbit . '</td></tr>';
-    $html .= '<tr><td>ISBN</td><td>' . $buku->isbn . '</td></tr>';
-    $html .= '<tr><td>Harga</td><td>' . $buku->harga_format . '</td></tr>';
-    $html .= '<tr><td>Stok</td><td>' . $buku->stok . '</td></tr>';
-    $html .= '<tr><td>Tersedia?</td><td>' . ($buku->tersedia ? 'Ya' : 'Tidak') . '</td></tr>';
-    $html .= '<tr><td>Created</td><td>' . $buku->created_at . '</td></tr>';
-    $html .= '<tr><td>Updated</td><td>' . $buku->updated_at . '</td></tr>';
-    $html .= '</table>';
-    
-    return $html;
-})->name('buku.index');;
- 
-// ========== TESTING ANGGOTA ==========
- 
-// List all anggota
-// Route::get('/anggota', function () {
-//     $anggotas = Anggota::all();
-    
-//     $html = '<h1>Daftar Anggota</h1>';
-//     $html .= '<table border="1" cellpadding="10">';
-//     $html .= '<tr>
-//                 <th>ID</th>
-//                 <th>Kode</th>
-//                 <th>Nama</th>
-//                 <th>Email</th>
-//                 <th>Umur</th>
-//                 <th>Status</th>
-//                 <th>Aksi</th>
-//               </tr>';
-    
-//     foreach ($anggotas as $anggota) {
-//         $html .= '<tr>';
-//         $html .= '<td>' . $anggota->id . '</td>';
-//         $html .= '<td>' . $anggota->kode_anggota . '</td>';
-//         $html .= '<td>' . $anggota->nama . '</td>';
-//         $html .= '<td>' . $anggota->email . '</td>';
-//         $html .= '<td>' . $anggota->umur . ' tahun</td>';
-//         $html .= '<td>' . $anggota->status . '</td>';
-//         $html .= '<td><a href="/anggota/' . $anggota->id . '">Detail</a></td>';
-//         $html .= '</tr>';
-//     }
-    
-//     $html .= '</table>';
-    
-//     return $html;
-// })->name('anggota.index');
- 
-// Show single anggota
-Route::get('/anggota/{id}', function ($id) {
-    $anggota = Anggota::findOrFail($id);
-    
-    $html = '<h1>Detail Anggota</h1>';
-    $html .= '<a href="/anggota">Kembali</a><br /><br />';
-    $html .= '<table border="1" cellpadding="10">';
-    $html .= '<tr><th>Field</th><th>Value</th></tr>';
-    $html .= '<tr><td>Kode Anggota</td><td>' . $anggota->kode_anggota . '</td></tr>';
-    $html .= '<tr><td>Nama</td><td>' . $anggota->nama . '</td></tr>';
-    $html .= '<tr><td>Email</td><td>' . $anggota->email . '</td></tr>';
-    $html .= '<tr><td>Telepon</td><td>' . $anggota->telepon . '</td></tr>';
-    $html .= '<tr><td>Alamat</td><td>' . $anggota->alamat . '</td></tr>';
-    $html .= '<tr><td>Tanggal Lahir</td><td>' . $anggota->tanggal_lahir->format('d-m-Y') . '</td></tr>';
-    $html .= '<tr><td>Umur</td><td>' . $anggota->umur . ' tahun</td></tr>';
-    $html .= '<tr><td>Jenis Kelamin</td><td>' . $anggota->jenis_kelamin . '</td></tr>';
-    $html .= '<tr><td>Pekerjaan</td><td>' . $anggota->pekerjaan . '</td></tr>';
-    $html .= '<tr><td>Tanggal Daftar</td><td>' . $anggota->tanggal_daftar->format('d-m-Y') . '</td></tr>';
-    $html .= '<tr><td>Lama Anggota</td><td>' . $anggota->lama_anggota . ' hari</td></tr>';
-    $html .= '<tr><td>Status</td><td>' . $anggota->status . '</td></tr>';
-    $html .= '</table>';
-    
-    return $html;
-})->name('anggota.index');
- 
-// Testing Scope & Query
-Route::get('/test-query', function () {
-    $html = '<h1>Testing Query Eloquent</h1>';
-    
-    // Buku tersedia
-    $tersedia = Buku::tersedia()->get();
-    $html .= '<h3>Buku Tersedia (Stok > 0): ' . $tersedia->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($tersedia as $buku) {
-        $html .= '<li>' . $buku->judul . ' (Stok: ' . $buku->stok . ')</li>';
-    }
-    $html .= '</ul>';
-    
-    // Buku Programming
-    $programming = Buku::kategori('Programming')->get();
-    $html .= '<h3>Buku Programming: ' . $programming->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($programming as $buku) {
-        $html .= '<li>' . $buku->judul . '</li>';
-    }
-    $html .= '</ul>';
-    
-    // Anggota Aktif
-    $aktif = Anggota::aktif()->get();
-    $html .= '<h3>Anggota Aktif: ' . $aktif->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($aktif as $anggota) {
-        $html .= '<li>' . $anggota->nama . ' (' . $anggota->email . ')</li>';
-    }
-    $html .= '</ul>';
-    
-    return $html;
+    return redirect()->route('login');
 });
+ 
+// Protected routes (dengan auth middleware)
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+ 
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Buku - Custom routes (harus sebelum resource)
+    Route::get('/buku/export', [BukuController::class, 'export'])->name('buku.export');
+    Route::get('/buku/search', [BukuController::class, 'search'])->name('buku.search');
+    Route::get('/buku/kategori/{kategori}', [BukuController::class, 'filterKategori'])->name('buku.kategori');
+    Route::post('/buku/bulk-delete', [BukuController::class, 'bulkDelete'])->name('buku.bulk-delete');
 
-// Testing Accessor & Scope
-Route::get('/test-accessor-scope', function () {
-    $html = '<h1>Testing Accessor & Scope</h1>';
+    Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
+    Route::get('/anggota/search', [AnggotaController::class, 'search'])->name('anggota.search');
+    Route::get('/anggota/filter', [AnggotaController::class, 'filter'])->name('anggota.filter');
+    Route::post('/anggota/bulk-delete', [AnggotaController::class, 'bulkDelete'])->name('anggota.bulk-delete');
 
-    // TODO: Test semua accessor dan scope
-
-    // Buku dengan status_stok_badge
-    $html .= '<h3>Buku dengan Status Stok Badge</h3>';
-    $html .= '<table border="1" cellpadding="10">';
-    $html .= '<tr><th>Judul</th><th>Stok</th><th>Status Stok</th><th>Tahun Label</th></tr>';
-    foreach (Buku::all() as $buku) {
-        $html .= '<tr>';
-        $html .= '<td>' . $buku->judul . '</td>';
-        $html .= '<td>' . $buku->stok . '</td>';
-        $html .= '<td>' . $buku->status_stok_badge . '</td>';
-        $html .= '<td>' . $buku->tahun_label . '</td>';
-        $html .= '</tr>';
-    }
-    $html .= '</table>';
-
-    // Buku terbaru (scope)
-    $bukuTerbaru = Buku::terbaru()->get();
-    $html .= '<h3>Buku Terbaru (tahun >= 2024): ' . $bukuTerbaru->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($bukuTerbaru as $buku) {
-        $html .= '<li>' . $buku->judul . ' (' . $buku->tahun_terbit . ')</li>';
-    }
-    $html .= '</ul>';
-
-    // Buku stok menipis (scope)
-    $bukuMenipis = Buku::stokMenipis()->get();
-    $html .= '<h3>Buku Stok Menipis (stok < 5): ' . $bukuMenipis->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($bukuMenipis as $buku) {
-        $html .= '<li>' . $buku->judul . ' (Stok: ' . $buku->stok . ')</li>';
-    }
-    $html .= '</ul>';
-
-    // Anggota dengan status_badge
-    $html .= '<h3>Anggota dengan Status Badge</h3>';
-    $html .= '<table border="1" cellpadding="10">';
-    $html .= '<tr><th>Nama</th><th>Status</th><th>Kategori Usia</th></tr>';
-    foreach (Anggota::all() as $anggota) {
-        $html .= '<tr>';
-        $html .= '<td>' . $anggota->nama . '</td>';
-        $html .= '<td>' . $anggota->status_badge . '</td>';
-        $html .= '<td>' . $anggota->kategori_usia . '</td>';
-        $html .= '</tr>';
-    }
-    $html .= '</table>';
-
-    // Anggota terdaftar bulan ini (scope)
-    $anggotaBulanIni = Anggota::terdaftarBulanIni()->get();
-    $html .= '<h3>Anggota Terdaftar Bulan Ini: ' . $anggotaBulanIni->count() . '</h3>';
-    $html .= '<ul>';
-    foreach ($anggotaBulanIni as $anggota) {
-        $html .= '<li>' . $anggota->nama . ' (' . $anggota->tanggal_daftar->format('d-m-Y') . ')</li>';
-    }
-    $html .= '</ul>';
-
-    return $html;
+    // Buku - CRUD
+    Route::resource('buku', BukuController::class);
+ 
+    // Anggota - CRUD
+    Route::resource('anggota', AnggotaController::class);
+ 
+    // Transaksi - CRUD + Custom routes
+    Route::resource('transaksi', TransaksiController::class);
+    Route::put('/transaksi/{id}/kembalikan', [TransaksiController::class, 'kembalikan'])->name('transaksi.kembalikan');
 });
+ 
+require __DIR__.'/auth.php';

@@ -1,8 +1,12 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Buku') }}
+        </h2>
+    </x-slot>
 
-@section('title', 'Edit Buku')
-
-@section('content')
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
@@ -200,7 +204,6 @@
             </div>
         </div>
     </div>
-@endsection
 
 @push('scripts')
     <script>
@@ -216,3 +219,6 @@
         });
     </script>
 @endpush
+        </div>
+    </div>
+</x-app-layout>
