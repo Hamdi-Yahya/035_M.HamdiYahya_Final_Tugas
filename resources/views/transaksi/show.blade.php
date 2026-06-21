@@ -14,7 +14,7 @@
                         <div class="alert alert-danger" role="alert">
                             <i class="bi bi-exclamation-triangle-fill"></i>
                             <strong>PERINGATAN!</strong> Buku ini sudah terlambat dikembalikan
-                            <strong>{{ $transaksi->terlambat }} hari</strong>.
+                            <strong>{{ $transaksi->terlambat_format }}</strong>.
                             Denda sementara: <strong>Rp {{ number_format($transaksi->terlambat * 5000, 0, ',', '.') }}</strong>
                         </div>
                     @endif
@@ -68,7 +68,7 @@
                                     <th>Keterlambatan</th>
                                     <td>
                                         @if($transaksi->terlambat > 0)
-                                            <span class="text-danger">{{ $transaksi->terlambat }} hari</span>
+                                            <span class="text-danger">{{ $transaksi->terlambat_format }}</span>
                                         @else
                                             <span class="text-success">Tepat waktu</span>
                                         @endif

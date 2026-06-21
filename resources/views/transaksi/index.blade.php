@@ -75,7 +75,7 @@
                                         @if($transaksi->status == 'Dipinjam')
                                             <span class="badge bg-warning text-dark">Dipinjam</span>
                                             @if(now() > $transaksi->tanggal_kembali)
-                                                <span class="badge bg-danger">Terlambat {{ $transaksi->terlambat }} hari</span>
+                                                <span class="badge bg-danger">Terlambat {{ $transaksi->terlambat_format }}</span>
                                             @endif
                                         @else
                                             <span class="badge bg-success">Dikembalikan</span>

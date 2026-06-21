@@ -105,7 +105,7 @@
                                     <td class="px-4 py-2 text-sm text-gray-500">{{ $tl->buku->judul }}</td>
                                     <td class="px-4 py-2">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            {{ $tl->terlambat }} hari
+                                            {{ $tl->terlambat_format }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-2 text-sm font-semibold text-red-600">

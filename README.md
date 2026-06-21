@@ -1,43 +1,35 @@
-# Tugas Pemrograman Web Pertemuan 13
+# Tugas Pemrograman Web Pertemuan 14
 
 ## Identitas
 - Nama: Muhammad Hamdi Yahya
 - NIM: 60324035
 - Kelas: B
-- Mata Kuliah: Pemorgraman Web 2
+- Mata Kuliah: Pemrograman Web 2
 
 ---
 
 # Tugas yang dibuat
 
-## Tugas 1 - Auto-Generate Kode Anggota (30%)
-- Implementasi auto-generate kode anggota dengan format: `AGT-[TAHUN]-[NOMOR_URUT]`
-- Contoh: AGT-2026-001, AGT-2026-002, AGT-2026-003
-- Helper function `generateKodeAnggota()` di `AnggotaController`
-- Nomor urut otomatis di-reset setiap pergantian tahun
-- Input kode anggota menjadi `readonly` (tidak bisa diedit manual)
-- Kode dikirim dari method `create()` ke view menggunakan `compact`
+## Tugas 1 - Fitur Pengembalian Buku (40%)
+- Halaman detail transaksi dilengkapi dengan tombol **"Kembalikan Buku"**.
+- Implementasi method `kembalikan()` di controller menggunakan database transaction.
+- **Perhitungan Denda Otomatis**: Dihitung sebesar Rp 5.000/hari hanya jika tanggal dikembalikan melewati tanggal harus kembali.
+- Menampilkan total denda keterlambatan pada halaman detail.
+- **Update Stok Otomatis**: Stok buku otomatis bertambah (+1) saat buku berhasil dikembalikan.
 
-## Tugas 2 - Export Anggota ke Excel (40%)
-- Implementasi fitur export data anggota ke file Excel (.xlsx)
-- Menggunakan package `maatwebsite/excel` (Laravel Excel)
-- Membuat Export Class `AnggotaExport` dengan `FromCollection` dan `WithHeadings`
-- Data yang diexport: Kode, Nama, Email, Telepon, Alamat, Tanggal Lahir, Jenis Kelamin, Pekerjaan, Status, Tanggal Daftar
-- Nama file otomatis dengan timestamp: `anggota_YYYY-MM-DD_HHmmss.xlsx`
-- Tombol "Export Excel" pada halaman daftar anggota
-- Method `export()` di `AnggotaController`
-- Route: `GET /anggota/export`
+## Tugas 2 - Laporan Transaksi (30%)
+- Halaman khusus laporan transaksi pada route `/transaksi/laporan`.
+- **Fitur Filter Laporan**:
+  - Berdasarkan Range Tanggal (Dari - Sampai).
+  - Berdasarkan Status (Semua / Dipinjam / Dikembalikan).
+  - Berdasarkan Anggota peminjam (dropdown).
+- **Tampilan Informatif**: Tabel rekap transaksi, Total jumlah transaksi, dan Total keseluruhan denda.
+- **Export PDF**: Fitur cetak laporan ke PDF menggunakan mekanisme print browser (`window.print()`) yang menyesuaikan tampilan dengan menyembunyikan form filter saat dicetak.
 
-## Tugas 3 - Advanced Search & Filter (30%)
-- Fitur pencarian dan filter advanced untuk data anggota
-- Filter berdasarkan keyword (nama, email, telepon)
-- Filter berdasarkan jenis kelamin (Laki-laki / Perempuan)
-- Filter berdasarkan status (Aktif / Nonaktif)
-- Filter berdasarkan pekerjaan (Mahasiswa / Pegawai / Wiraswasta)
-- Statistik otomatis menyesuaikan hasil pencarian
-- Tombol reset untuk menghapus semua filter
-- Method `search()` di `AnggotaController`
-- Route: `GET /anggota/search`
+## Tugas 3 - Notifikasi Terlambat (30%)
+- **Dashboard Widget**: Tambahan card khusus "Buku Terlambat" di dashboard yang menampilkan jumlah transaksi terlambat, daftar anggota yang terlambat, serta estimasi denda sementaranya.
+- **Badge Terlambat**: Pada tabel di index transaksi, ditambahkan badge warna merah "Terlambat X hari" untuk peminjaman yang sudah lewat batas waktu.
+- **Warning Reminder**: Pada halaman detail transaksi, muncul alert box peringatan (warning) berwarna merah jika peminjaman saat ini sudah melewati tanggal kembali.
 
 ---
 
@@ -45,37 +37,44 @@
 
 > Semua screenshot disimpan di folder `image/`
 
-## 1. Form Tambah Anggota - Kode Otomatis
-Menampilkan form tambah anggota dengan kode anggota yang di-generate otomatis (readonly).
+## 1. Detail Transaksi (Tombol Kembalikan)
+Menampilkan halaman detail transaksi peminjaman yang sedang berlangsung, dilengkapi tombol "Kembalikan Buku".
 
-![Auto Generate Kode Anggota](image/1.png)
-
----
-
-## 2. Tombol Export Excel
-Menampilkan tombol Export Excel pada halaman daftar anggota.
-
-![Tombol Export Excel](image/2.png)
+![Detail Transaksi](image/1.png)
 
 ---
 
-## 3. Hasil File Excel
-Menampilkan isi file Excel (.xlsx) yang berhasil diexport dengan data anggota.
+## 2. Detail Transaksi (Bukti Pengembalian & Denda)
+Menampilkan detail transaksi setelah buku dikembalikan, memuat informasi tanggal dikembalikan, lama keterlambatan, dan denda (jika ada).
 
-![Hasil File Excel](image/3.png)
-
----
-
-## 4. Form Search & Filter Advanced
-Menampilkan form pencarian dan filter advanced pada halaman daftar anggota.
-
-![Form Search Filter](image/4.png)
+![Detail Pengembalian dan Denda](image/2.png)
 
 ---
 
-## 5. Hasil Pencarian 
-Menampilkan hasil pencarian anggota berdasarkan keyword nama/email/telepon.
+## 3. Halaman Laporan Transaksi & Filter
+Menampilkan halaman rekap laporan transaksi dengan form filter (tanggal, status, anggota) beserta total transaksi dan total denda.
 
-![Hasil Pencarian Keyword](image/5.png)
+![Laporan Transaksi](image/3.png)
+
+---
+
+## 4. Hasil Export PDF Laporan
+Menampilkan print preview / hasil Export PDF dari laporan transaksi dengan format yang rapi (tanpa form filter).
+
+![Export PDF Laporan](image/4.png)
+
+---
+
+## 5. Dashboard - Widget Buku Terlambat
+Menampilkan halaman dashboard baru yang memiliki widget khusus berisi daftar buku yang terlambat dikembalikan beserta estimasi dendanya.
+
+![Widget Buku Terlambat Dashboard](image/5.png)
+
+---
+
+## 6. Index Transaksi - Badge Terlambat
+Menampilkan daftar seluruh transaksi dengan penanda badge merah "Terlambat X hari" untuk buku yang belum dikembalikan melewati batas waktu.
+
+![Badge Terlambat](image/6.png)
 
 ---
