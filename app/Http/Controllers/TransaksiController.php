@@ -132,7 +132,47 @@ class TransaksiController extends Controller
                              ->with('error', 'Gagal mengembalikan buku: ' . $e->getMessage());
         }
     }
- 
+
+    /**
+     * Menampilkan halaman laporan transaksi dengan filter.
+     */
+    public function laporan(Request $request)
+    {
+        // Query dasar dengan relasi
+        $query = Transaksi::with(['anggota', 'buku']);
+    
+        // Filter range tanggal (dari)
+        if ($request->filled('dari')) {
+            $query->whereDate('tanggal_pinjam', '>=', $request->dari);
+        }
+    
+        // Filter range tanggal (sampai)
+        if ($request->filled('sampai')) {
+            $query->whereDate('tanggal_pinjam', '<=', $request->sampai);
+        }
+    
+        // Filter status
+        if ($request->filled('status') && $request->status != 'Semua') {
+            $query->where('status', $request->status);
+        }
+    
+        // Filter anggota
+        if ($request->filled('anggota_id')) {
+            $query->where('anggota_id', $request->anggota_id);
+        }
+    
+        // Ambil data transaksi
+        $transaksis = $query->latest()->get();
+    
+        // Hitung total denda
+        $totalDenda = $transaksis->sum('denda');
+    
+        // Ambil semua anggota untuk dropdown filter
+        $anggotas = Anggota::orderBy('nama')->get();
+    
+        return view('transaksi.laporan', compact('transaksis', 'totalDenda', 'anggotas'));
+    }
+
     /**
      * Generate kode transaksi otomatis.
      */

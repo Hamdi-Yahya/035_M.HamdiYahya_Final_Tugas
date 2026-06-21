@@ -73,6 +73,52 @@
                     </div>
                 </div>
             </div>
+
+            @if($transaksiTerlambat->count() > 0)
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 border-l-4 border-red-500">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-red-600">
+                            <svg class="inline h-6 w-6 text-red-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Buku Terlambat
+                        </h3>
+                        <span class="px-3 py-1 text-sm font-bold rounded-full bg-red-100 text-red-800">
+                            {{ $transaksiTerlambat->count() }} transaksi
+                        </span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Anggota</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Buku</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Terlambat</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Denda Sementara</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($transaksiTerlambat as $tl)
+                                <tr>
+                                    <td class="px-4 py-2 text-sm text-gray-900">{{ $tl->anggota->nama }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-500">{{ $tl->buku->judul }}</td>
+                                    <td class="px-4 py-2">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            {{ $tl->terlambat }} hari
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-2 text-sm font-semibold text-red-600">
+                                        Rp {{ number_format($tl->terlambat * 5000, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endif
  
             <!-- Quick Actions -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">

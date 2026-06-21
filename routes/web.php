@@ -14,9 +14,7 @@ Route::get('/', function () {
 // Protected routes (dengan auth middleware)
 Route::middleware(['auth'])->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
  
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,7 +37,10 @@ Route::middleware(['auth'])->group(function () {
  
     // Anggota - CRUD
     Route::resource('anggota', AnggotaController::class);
- 
+
+    // Laporan Transaksi
+    Route::get('/transaksi/laporan', [TransaksiController::class, 'laporan'])->name('transaksi.laporan');
+    
     // Transaksi - CRUD + Custom routes
     Route::resource('transaksi', TransaksiController::class);
     Route::put('/transaksi/{id}/kembalikan', [TransaksiController::class, 'kembalikan'])->name('transaksi.kembalikan');
