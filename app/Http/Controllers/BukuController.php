@@ -48,8 +48,13 @@ class BukuController extends Controller
     public function store(StoreBukuRequest $request)
     {
         try {
-            // Create buku baru dengan validated data
-            Buku::create($request->validated());
+            // Ambil data validated dan set kolom kategori dari relasi kategori_id
+            $data = $request->validated();
+            $kategori = Kategori::find($data['kategori_id']);
+            $data['kategori'] = $kategori ? $kategori->nama_kategori : null;
+
+            // Create buku baru dengan data yang sudah dilengkapi
+            Buku::create($data);
 
             // Redirect dengan success message
             return redirect()->route('buku.index')
@@ -91,8 +96,13 @@ class BukuController extends Controller
         try {
             $buku = Buku::findOrFail($id);
 
-            // Update buku dengan validated data
-            $buku->update($request->validated());
+            // Ambil data validated dan set kolom kategori dari relasi kategori_id
+            $data = $request->validated();
+            $kategori = Kategori::find($data['kategori_id']);
+            $data['kategori'] = $kategori ? $kategori->nama_kategori : null;
+
+            // Update buku dengan data yang sudah dilengkapi
+            $buku->update($data);
 
             // Redirect dengan success message
             return redirect()->route('buku.show', $buku->id)
@@ -115,12 +125,15 @@ class BukuController extends Controller
             $buku = Buku::findOrFail($id);
             $judulBuku = $buku->judul;
             
+            // Hapus semua transaksi terkait buku ini terlebih dahulu
+            $buku->transaksis()->delete();
+
             // Delete buku
             $buku->delete();
             
             // Redirect dengan success message
             return redirect()->route('buku.index')
-                             ->with('success', "Buku '{$judulBuku}' berhasil dihapus!");
+                             ->with('success', "Buku '{$judulBuku}' beserta riwayat transaksinya berhasil dihapus!");
                              
         } catch (\Exception $e) {
             // Redirect dengan error message jika gagal
@@ -141,10 +154,14 @@ class BukuController extends Controller
         try {
             $ids = $request->buku_ids;
 
+            // Hapus semua transaksi terkait buku yang akan dihapus
+            \App\Models\Transaksi::whereIn('buku_id', $ids)->delete();
+
+            // Hapus buku
             Buku::whereIn('id', $ids)->delete();
 
             return redirect()->route('buku.index')
-                             ->with('success', count($ids) . ' buku berhasil dihapus!');
+                             ->with('success', count($ids) . ' buku beserta riwayat transaksinya berhasil dihapus!');
 
         } catch (\Exception $e) {
             return redirect()->back()

@@ -28,7 +28,7 @@ class StoreBukuRequest extends FormRequest
         $rules = [
             'kode_buku' => ['required', 'string', 'max:20', 'unique:buku,kode_buku', new KodeBukuFormat],
             'judul' => 'required|string|max:200',
-            'kategori' => 'required|in:Programming,Database,Web Design,Networking,Data Science',
+            'kategori_id' => 'required|exists:kategori,id',
             'pengarang' => 'required|string|max:100',
             'penerbit' => 'required|string|max:100',
             'tahun_terbit' => 'required|integer|min:1900|max:' . date('Y'),
@@ -40,7 +40,8 @@ class StoreBukuRequest extends FormRequest
         ];
 
         // Jika kategori "Programming", bahasa harus "Inggris"
-        if ($this->input('kategori') === 'Programming') {
+        $kategori = \App\Models\Kategori::find($this->input('kategori_id'));
+        if ($kategori && $kategori->nama_kategori === 'Programming') {
             $rules['bahasa'] = 'required|string|in:Inggris';
         }
 
@@ -63,8 +64,8 @@ class StoreBukuRequest extends FormRequest
             'kode_buku.max' => 'Kode buku maksimal 20 karakter.',
             'judul.required' => 'Judul buku wajib diisi.',
             'judul.max' => 'Judul buku maksimal 200 karakter.',
-            'kategori.required' => 'Kategori wajib dipilih.',
-            'kategori.in' => 'Kategori yang dipilih tidak valid.',
+            'kategori_id.required' => 'Kategori wajib dipilih.',
+            'kategori_id.exists' => 'Kategori yang dipilih tidak valid.',
             'pengarang.required' => 'Nama pengarang wajib diisi.',
             'pengarang.max' => 'Nama pengarang maksimal 100 karakter.',
             'penerbit.required' => 'Nama penerbit wajib diisi.',
@@ -95,7 +96,7 @@ class StoreBukuRequest extends FormRequest
         return [
             'kode_buku' => 'kode buku',
             'judul' => 'judul buku',
-            'kategori' => 'kategori',
+            'kategori_id' => 'kategori',
             'pengarang' => 'nama pengarang',
             'penerbit' => 'nama penerbit',
             'tahun_terbit' => 'tahun terbit',

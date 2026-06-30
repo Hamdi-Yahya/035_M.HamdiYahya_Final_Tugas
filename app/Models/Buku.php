@@ -15,6 +15,20 @@ class Buku extends Model
      * @var string
      */
     protected $table = 'buku';
+
+    /**
+     * Boot method untuk mendaftarkan event model.
+     * Menghapus semua transaksi terkait saat buku dihapus.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Event deleting: hapus semua transaksi terkait sebelum buku dihapus
+        static::deleting(function ($buku) {
+            $buku->transaksis()->delete();
+        });
+    }
  
     /**
      * Kolom yang dapat diisi secara mass assignment.
