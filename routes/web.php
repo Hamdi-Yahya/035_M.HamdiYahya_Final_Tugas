@@ -1,9 +1,12 @@
 <?php
  
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\KategoriController;
 use Illuminate\Support\Facades\Route;
  
 // Public routes (tanpa auth)
@@ -38,12 +41,20 @@ Route::middleware(['auth'])->group(function () {
     // Anggota - CRUD
     Route::resource('anggota', AnggotaController::class);
 
+    // Kategori - CRUD
+    Route::resource('kategori', KategoriController::class);
+
     // Laporan Transaksi
     Route::get('/transaksi/laporan', [TransaksiController::class, 'laporan'])->name('transaksi.laporan');
     
     // Transaksi - CRUD + Custom routes
     Route::resource('transaksi', TransaksiController::class);
-    Route::put('/transaksi/{id}/kembalikan', [TransaksiController::class, 'kembalikan'])->name('transaksi.kembalikan');
+    Route::patch('/transaksi/{id}/kembalikan', [TransaksiController::class, 'kembalikan'])->name('transaksi.kembalikan');
+
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
 });
  
 require __DIR__.'/auth.php';

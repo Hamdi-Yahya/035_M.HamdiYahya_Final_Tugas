@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBukuRequest;
 use App\Http\Requests\UpdateBukuRequest;
 use App\Models\Buku;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class BukuController extends Controller
@@ -20,13 +21,15 @@ class BukuController extends Controller
         $totalBuku = Buku::count();
         $bukuTersedia = Buku::where('stok', '>', 0)->count();
         $bukuHabis = Buku::where('stok', 0)->count();
+        $kategoris = Kategori::all();
         
         // Return view dengan data
         return view('buku.index', compact(
             'bukus',
             'totalBuku',
             'bukuTersedia',
-            'bukuHabis'
+            'bukuHabis',
+            'kategoris'
         ));
     }
 
@@ -35,7 +38,8 @@ class BukuController extends Controller
      */
     public function create()
     {
-        return view ('buku.create');
+        $kategoris = Kategori::all();
+        return view('buku.create', compact('kategoris'));
     }
 
     /**
@@ -75,7 +79,8 @@ class BukuController extends Controller
     public function edit(string $id)
     {
         $buku = Buku::findOrFail($id);
-        return view('buku.edit', compact('buku'));
+        $kategoris = Kategori::all();
+        return view('buku.edit', compact('buku', 'kategoris'));
     }
 
     /**
@@ -217,6 +222,9 @@ class BukuController extends Controller
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
 
         if ($request->filled('tahun')) {
             $query->where('tahun_terbit', $request->tahun);
@@ -230,14 +238,23 @@ class BukuController extends Controller
             }
         }
 
+        // Filter berdasarkan range harga
+        if ($request->filled('harga_min')) {
+            $query->where('harga', '>=', $request->harga_min);
+        }
+        if ($request->filled('harga_max')) {
+            $query->where('harga', '<=', $request->harga_max);
+        }
+
         $bukus = $query->latest()->get();
 
         $totalBuku = Buku::count();
         $bukuTersedia = Buku::where('stok', '>', 0)->count();
         $bukuHabis = Buku::where('stok', 0)->count();
+        $kategoris = Kategori::all();
 
         return view('buku.index', compact(
-            'bukus', 'totalBuku', 'bukuTersedia', 'bukuHabis'
+            'bukus', 'totalBuku', 'bukuTersedia', 'bukuHabis', 'kategoris'
         ));
     }
 }

@@ -2,10 +2,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
                         <span class="ml-2 text-xl font-bold text-gray-800">Perpustakaan</span>
                     </a>
                 </div>
@@ -24,16 +23,34 @@
                     <x-nav-link :href="route('transaksi.index')" :active="request()->routeIs('transaksi.*')">
                         {{ __('Transaksi') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('kategori.index')" :active="request()->routeIs('kategori.*')">
+                        {{ __('Kategori') }}
+                    </x-nav-link>
                 </div>
             </div>
- 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+
+            {{-- Search Box + Settings Dropdown (sejajar di kanan navbar) --}}
+            <div class="hidden sm:flex sm:items-center sm:ml-6 sm:gap-3">
+
+                {{-- Global Search Box --}}
+                <form action="{{ route('search') }}" method="GET" class="relative flex items-center">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" name="q" value="{{ request('q') }}"
+                               placeholder="Cari buku, anggota, transaksi..."
+                               class="w-64 pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out" />
+                    </div>
+                </form>
+
+                {{-- Admin Dropdown --}}
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
- 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -88,6 +105,23 @@
             <x-responsive-nav-link :href="route('transaksi.index')" :active="request()->routeIs('transaksi.*')">
                 {{ __('Transaksi') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kategori.index')" :active="request()->routeIs('kategori.*')">
+                {{ __('Kategori') }}
+            </x-responsive-nav-link>
+
+            {{-- Search Box (responsive/mobile) --}}
+            <div class="px-4 pt-2">
+                <form action="{{ route('search') }}" method="GET" class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                    <input type="search" name="q" value="{{ request('q') }}"
+                           placeholder="Cari buku, anggota, transaksi..."
+                           class="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+                </form>
+            </div>
         </div>
  
         <!-- Responsive Settings Options -->

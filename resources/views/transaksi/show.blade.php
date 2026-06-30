@@ -100,13 +100,26 @@
                         </a>
 
                         @if($transaksi->status == 'Dipinjam')
-                            <form action="{{ route('transaksi.kembalikan', $transaksi->id) }}" method="POST" id="form-kembalikan">
+                            <button type="button" class="btn btn-success" id="btn-kembalikan">
+                                <i class="bi bi-arrow-return-left"></i> Kembalikan Buku
+                            </button>
+                        
+                            <form id="form-kembalikan" action="{{ route('transaksi.kembalikan', $transaksi->id) }}" method="POST" class="d-none">
                                 @csrf
-                                @method('PUT')
-                                <button type="button" class="btn btn-success" id="btn-kembalikan">
-                                    <i class="bi bi-box-arrow-in-left"></i> Kembalikan Buku
-                                </button>
+                                @method('PATCH')
                             </form>
+                        @else
+                            @if($transaksi->tanggal_dikembalikan <= $transaksi->tanggal_kembali)
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle"></i> Dikembalikan tepat waktu pada
+                                    {{ $transaksi->tanggal_dikembalikan->format('d M Y') }}
+                                </div>
+                            @else
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle"></i> Terlambat dikembalikan!
+                                    Denda: Rp {{ number_format($transaksi->denda, 0, ',', '.') }}
+                                </div>
+                            @endif
                         @endif
                     </div>
 
@@ -117,26 +130,23 @@
 
     {{-- SweetAlert konfirmasi pengembalian --}}
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const btnKembalikan = document.getElementById('btn-kembalikan');
-        if (btnKembalikan) {
-            btnKembalikan.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Kembalikan Buku?',
-                    text: 'Pastikan buku sudah diterima kembali.',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#198754',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Ya, Kembalikan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('form-kembalikan').submit();
-                    }
-                });
-            });
-        }
+    document.getElementById('btn-kembalikan')?.addEventListener('click', function() {
+        Swal.fire({
+            title: 'Konfirmasi Pengembalian',
+            text: 'Apakah Anda yakin ingin mengembalikan buku ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            confirmButtonText: 'Ya, Kembalikan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-kembalikan').submit();
+            }
+        });
+    });
     </script>
     @endpush
 </x-app-layout>

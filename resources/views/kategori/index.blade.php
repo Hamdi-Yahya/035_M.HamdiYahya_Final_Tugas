@@ -1,24 +1,56 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Daftar Kategori') }}
+        </h2>
+    </x-slot>
 
-@section('title', 'Daftar Kategori Buku')
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="bi bi-tags"></i> Kategori Buku</h1>
+                <a href="{{ route('kategori.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Tambah Kategori
+                </a>
+            </div>
 
-@section('content')
-    <h1 class="mb-4">Daftar Kategori Buku</h1>
-
-    <div class="row">
-        @foreach ($kategori_list as $kategori)
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $kategori['nama'] }}</h5>
-                    <p class="card-text">{{ $kategori['deskripsi'] }}</p>
-                    <p class="card-text"><strong>Jumlah Buku:</strong> {{ $kategori['jumlah_buku'] }}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('kategori.show', $kategori['id']) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Kategori</th>
+                                    <th>Deskripsi</th>
+                                    <th>Jumlah Buku</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($kategoris as $kategori)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td><strong>{{ $kategori->nama_kategori }}</strong></td>
+                                        <td>{{ $kategori->deskripsi ?? '-' }}</td>
+                                        <td><span class="badge bg-info">{{ $kategori->bukus_count }}</span></td>
+                                        <td>
+                                            <a href="{{ route('kategori.show', $kategori->id) }}" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
+                                            <a href="{{ route('kategori.edit', $kategori->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" class="d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus kategori ini? Buku terkait mungkin akan kehilangan kategori.')"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="5" class="text-center">Belum ada kategori.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        @endforeach
     </div>
-@endsection
+</x-app-layout>

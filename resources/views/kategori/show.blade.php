@@ -1,46 +1,56 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Detail Kategori</h2>
+    </x-slot>
 
-@section('title', 'Detail Kategori - ' . $kategori['nama'])
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="bi bi-tag"></i> Kategori: {{ $kategori->nama_kategori }}</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Deskripsi:</strong> {{ $kategori->deskripsi ?? 'Tidak ada deskripsi' }}</p>
+                    <p><strong>Jumlah Buku:</strong> <span class="badge bg-primary">{{ $kategori->bukus_count }}</span></p>
+                    <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+                </div>
+            </div>
 
-@section('content')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('kategori.index') }}">Kategori</a></li>
-            <li class="breadcrumb-item active">{{ $kategori['nama'] }}</li>
-        </ol>
-    </nav>
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <h3 class="mb-0">{{ $kategori['nama'] }}</h3>
-        </div>
-        <div class="card-body">
-            <p><strong>Deskripsi:</strong> {{ $kategori['deskripsi'] }}</p>
-            <p><strong>Jumlah Buku:</strong> {{ $kategori['jumlah_buku'] }}</p>
+            <h4>Buku dalam kategori ini:</h4>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode Buku</th>
+                                    <th>Judul</th>
+                                    <th>Pengarang</th>
+                                    <th>Stok</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($bukus as $buku)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td><code>{{ $buku->kode_buku }}</code></td>
+                                    <td>{{ $buku->judul }}</td>
+                                    <td>{{ $buku->pengarang }}</td>
+                                    <td>{{ $buku->stok }}</td>
+                                    <td>
+                                        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-info text-white">Detail</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="6" class="text-center">Belum ada buku di kategori ini.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <h4 class="mb-3">Daftar Buku dalam Kategori Ini</h4>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>No</th>
-                <th>Judul</th>
-                <th>Penulis</th>
-                <th>Tahun</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($buku_list as $index => $buku)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $buku['judul'] }}</td>
-                <td>{{ $buku['penulis'] }}</td>
-                <td>{{ $buku['tahun'] }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali ke Daftar Kategori</a>
-@endsection
+</x-app-layout>

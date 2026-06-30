@@ -95,14 +95,12 @@
 
                 <!-- Dropdown Kategori -->
                 <div class="col-md-3">
-                    <label for="kategori" class="form-label small text-muted">Kategori</label>
-                    <select name="kategori" id="kategori" class="form-select">
+                    <label for="kategori_id" class="form-label small text-muted">Kategori</label>
+                    <select name="kategori_id" id="kategori_id" class="form-select">
                         <option value="">-- Semua Kategori --</option>
-                        <option value="Programming" {{ request('kategori') == 'Programming' ? 'selected' : '' }}>Programming</option>
-                        <option value="Database" {{ request('kategori') == 'Database' ? 'selected' : '' }}>Database</option>
-                        <option value="Web Design" {{ request('kategori') == 'Web Design' ? 'selected' : '' }}>Web Design</option>
-                        <option value="Networking" {{ request('kategori') == 'Networking' ? 'selected' : '' }}>Networking</option>
-                        <option value="Data Science" {{ request('kategori') == 'Data Science' ? 'selected' : '' }}>Data Science</option>
+                        @foreach($kategoris as $k)
+                            <option value="{{ $k->id }}" {{ request('kategori_id') == $k->id ? 'selected' : '' }}>{{ $k->nama_kategori }}</option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -127,6 +125,18 @@
                     </select>
                 </div>
 
+                <!-- Range Harga -->
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Harga Min</label>
+                    <input type="number" name="harga_min" class="form-control"
+                           placeholder="Min" value="{{ request('harga_min') }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Harga Max</label>
+                    <input type="number" name="harga_max" class="form-control"
+                           placeholder="Max" value="{{ request('harga_max') }}">
+                </div>
+
                 <!-- Tombol Aksi -->
                 <div class="col-md-2 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary flex-fill">
@@ -148,25 +158,15 @@
         <h6 class="card-title">
             <i class="bi bi-funnel"></i> Filter Kategori:
         </h6>
-        <div class="btn-group" role="group">
-            <a href="{{ route('buku.index') }}" class="btn btn-sm {{ !isset($kategori) ? 'btn-primary' : 'btn-outline-primary' }}">
+        <div class="btn-group flex-wrap" role="group">
+            <a href="{{ route('buku.index') }}" class="btn btn-sm {{ !request('kategori_id') && !request('kategori') ? 'btn-primary' : 'btn-outline-primary' }}">
                 Semua
             </a>
-            <a href="{{ route('buku.kategori', 'Programming') }}" class="btn btn-sm {{ isset($kategori) && $kategori == 'Programming' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Programming
-            </a>
-            <a href="{{ route('buku.kategori', 'Database') }}" class="btn btn-sm {{ isset($kategori) && $kategori == 'Database' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Database
-            </a>
-            <a href="{{ route('buku.kategori', 'Web Design') }}" class="btn btn-sm {{ isset($kategori) && $kategori == 'Web Design' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Web Design
-            </a>
-            <a href="{{ route('buku.kategori', 'Networking') }}" class="btn btn-sm {{ isset($kategori) && $kategori == 'Networking' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Networking
-            </a>
-            <a href="{{ route('buku.kategori', 'Data Science') }}" class="btn btn-sm {{ isset($kategori) && $kategori == 'Data Science' ? 'btn-primary' : 'btn-outline-primary' }}">
-                Data Science
-            </a>
+            @foreach($kategoris as $k)
+                <a href="{{ route('buku.search', ['kategori_id' => $k->id]) }}" class="btn btn-sm {{ request('kategori_id') == $k->id ? 'btn-primary' : 'btn-outline-primary' }}">
+                    {{ $k->nama_kategori }}
+                </a>
+            @endforeach
         </div>
     </div>
 </div>
@@ -198,8 +198,8 @@
                     </div>
                     <i class="bi bi-book text-primary" style="font-size: 4rem;"></i>
                     <div class="mt-2">
-                        <span class="badge bg-{{ $buku->kategori == 'Programming' ? 'primary' : ($buku->kategori == 'Database' ? 'success' : ($buku->kategori == 'Web Design' ? 'info' : ($buku->kategori == 'Networking' ? 'warning' : 'danger'))) }}">
-                            {{ $buku->kategori }}
+                        <span class="badge bg-primary">
+                            {{ $buku->kategori_rel->nama_kategori ?? $buku->kategori ?? 'Umum' }}
                         </span>
                     </div>
                 </div>

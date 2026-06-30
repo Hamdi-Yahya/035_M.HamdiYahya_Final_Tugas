@@ -6,6 +6,7 @@ use App\Http\Requests\StoreAnggotaRequest;
 use App\Http\Requests\UpdateAnggotaRequest;
 use Illuminate\Http\Request;
 use App\Models\Anggota;
+use App\Models\Transaksi;
 use App\Exports\AnggotaExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -33,12 +34,26 @@ class AnggotaController extends Controller
     }
  
     /**
-     * Display the specified resource.
+     * Menampilkan detail anggota beserta riwayat peminjaman.
      */
     public function show(string $id)
     {
         $anggota = Anggota::findOrFail($id);
-        return view('anggota.show', compact('anggota'));
+
+        // Riwayat peminjaman anggota ini
+        $transaksis = Transaksi::with('buku')
+            ->where('anggota_id', $id)
+            ->latest()
+            ->get();
+
+        // Statistik peminjaman anggota
+        $statsAnggota = [
+            'total_pinjam' => $transaksis->count(),
+            'sedang_dipinjam' => $transaksis->where('status', 'Dipinjam')->count(),
+            'total_denda' => $transaksis->sum('denda'),
+        ];
+
+        return view('anggota.show', compact('anggota', 'transaksis', 'statsAnggota'));
     }
  
     /**
@@ -140,6 +155,14 @@ class AnggotaController extends Controller
         
         if ($request->pekerjaan) {
             $query->where('pekerjaan', $request->pekerjaan);
+        }
+
+        // Filter berdasarkan range umur
+        if ($request->filled('umur_min')) {
+            $query->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) >= ?', [$request->umur_min]);
+        }
+        if ($request->filled('umur_max')) {
+            $query->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= ?', [$request->umur_max]);
         }
         
         $anggotas = $query->latest()->get();

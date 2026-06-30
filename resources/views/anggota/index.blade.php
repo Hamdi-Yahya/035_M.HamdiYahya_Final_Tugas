@@ -101,6 +101,17 @@
                         <option value="Wiraswasta" {{ request('pekerjaan') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
                     </select>
                 </div>
+                
+                <!-- Range Umur -->
+                <div class="col-md-2">
+                    <input type="number" name="umur_min" class="form-control"
+                           placeholder="Umur Min" value="{{ request('umur_min') }}">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="umur_max" class="form-control"
+                           placeholder="Umur Max" value="{{ request('umur_max') }}">
+                </div>
+
                 <div class="col-md-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary flex-fill">
                         <i class="bi bi-search"></i> Cari

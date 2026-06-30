@@ -25,6 +25,7 @@ class Buku extends Model
         'kode_buku',
         'judul',
         'kategori',
+        'kategori_id',
         'pengarang',
         'penerbit',
         'tahun_terbit',
@@ -133,8 +134,12 @@ class Buku extends Model
     }
 
     public function transaksis()
-{
-    return $this->hasMany(Transaksi::class);
-}
+    {
+        return $this->hasMany(Transaksi::class);
+    }
 
+    public function kategori_rel()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
 }

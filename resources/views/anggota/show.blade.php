@@ -141,6 +141,86 @@
                 </form>
             </div>
         </div>
+        </div>
+    </div>
+</div>
+
+{{-- Statistik Peminjaman --}}
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card border-primary">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Total Pinjam</h6>
+                <h3>{{ $statsAnggota['total_pinjam'] }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Sedang Dipinjam</h6>
+                <h3>{{ $statsAnggota['sedang_dipinjam'] }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-danger">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Total Denda</h6>
+                <h3>Rp {{ number_format($statsAnggota['total_denda'], 0, ',', '.') }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Riwayat Peminjaman --}}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Riwayat Peminjaman</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Buku</th>
+                                <th>Tgl Pinjam</th>
+                                <th>Tgl Kembali</th>
+                                <th>Status</th>
+                                <th>Denda</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($transaksis as $trx)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td><code>{{ $trx->kode_transaksi }}</code></td>
+                                <td>{{ $trx->buku->judul }}</td>
+                                <td>{{ $trx->tanggal_pinjam->format('d M Y') }}</td>
+                                <td>{{ $trx->tanggal_dikembalikan?->format('d M Y') ?? '-' }}</td>
+                                <td>
+                                    @if($trx->status == 'Dipinjam')
+                                        <span class="badge bg-warning text-dark">Dipinjam</span>
+                                    @else
+                                        <span class="badge bg-success">Dikembalikan</span>
+                                    @endif
+                                </td>
+                                <td>{{ $trx->denda ? 'Rp ' . number_format($trx->denda, 0, ',', '.') : '-' }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Belum ada riwayat peminjaman</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
