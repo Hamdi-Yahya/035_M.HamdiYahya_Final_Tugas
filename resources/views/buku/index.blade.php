@@ -188,73 +188,68 @@
 
 {{-- Daftar Buku --}}
 @forelse ($bukus as $buku)
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-2 text-center">
-                    {{-- Checkbox untuk bulk delete --}}
-                    <div class="form-check d-flex justify-content-center mb-2">
-                        <input type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" class="form-check-input buku-checkbox">
-                    </div>
-                    <i class="bi bi-book text-primary" style="font-size: 4rem;"></i>
-                    <div class="mt-2">
-                        <span class="badge bg-primary">
+    <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body py-3">
+            <div class="row align-items-center">
+                {{-- Checkbox di paling kiri, sejajar tengah vertikal --}}
+                <div class="col-auto pe-0">
+                    <input type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" class="form-check-input buku-checkbox">
+                </div>
+
+                {{-- Ikon buku dan badge kategori --}}
+                <div class="col-auto text-center" style="width: 80px;">
+                    <i class="bi bi-book text-primary" style="font-size: 2.5rem;"></i>
+                    <div class="mt-1">
+                        <span class="badge bg-primary" style="font-size: 0.65rem;">
                             {{ $buku->kategori_rel->nama_kategori ?? $buku->kategori ?? 'Umum' }}
                         </span>
                     </div>
                 </div>
                 
-                <div class="col-md-7">
-                    <h5 class="card-title">
+                {{-- Informasi buku --}}
+                <div class="col">
+                    <h6 class="card-title mb-1 fw-bold">
                         <a href="{{ route('buku.show', $buku->id) }}" class="text-decoration-none">
                             {{ $buku->judul }}
                         </a>
-                    </h5>
+                    </h6>
                     
-                    <p class="card-text text-muted mb-2">
+                    <p class="card-text text-muted small mb-1">
                         <i class="bi bi-person"></i> {{ $buku->pengarang }} | 
                         <i class="bi bi-building"></i> {{ $buku->penerbit }} | 
                         <i class="bi bi-calendar"></i> {{ $buku->tahun_terbit }}
                     </p>
                     
                     @if ($buku->isbn)
-                        <p class="card-text small text-muted mb-1">
+                        <span class="text-muted small">
                             <i class="bi bi-upc"></i> ISBN: {{ $buku->isbn }}
-                        </p>
+                        </span>
                     @endif
                     
                     @if ($buku->deskripsi)
-                        <p class="card-text">
-                            {{ Str::limit($buku->deskripsi, 150) }}
+                        <p class="card-text small text-muted mb-0 mt-1">
+                            {{ Str::limit($buku->deskripsi, 120) }}
                         </p>
                     @endif
                 </div>
                 
-                <div class="col-md-3 text-end">
-                    <h4 class="text-primary mb-2">
-                        {{ $buku->harga_format }}
-                    </h4>
+                {{-- Harga, stok, dan tombol aksi --}}
+                <div class="col-auto text-end">
+                    <h5 class="text-primary mb-1 fw-bold">{{ $buku->harga_format }}</h5>
+
+                    @if ($buku->stok > 0)
+                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Tersedia</span>
+                        <div class="text-muted small mb-2">Stok: {{ $buku->stok }} buku</div>
+                    @else
+                        <span class="badge bg-danger mb-2"><i class="bi bi-x-circle"></i> Habis</span>
+                    @endif
                     
-                    <div class="mb-3">
-                        @if ($buku->stok > 0)
-                            <span class="badge bg-success">
-                                <i class="bi bi-check-circle"></i> Tersedia
-                            </span>
-                            <div class="text-muted small mt-1">
-                                Stok: {{ $buku->stok }} buku
-                            </div>
-                        @else
-                            <span class="badge bg-danger">
-                                <i class="bi bi-x-circle"></i> Habis
-                            </span>
-                        @endif
-                    </div>
-                    
-                    <div class="btn-group-vertical d-grid gap-2">
-                        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-info text-white">
+                    {{-- Tombol aksi horizontal compact --}}
+                    <div class="d-flex gap-1 justify-content-end">
+                        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-info text-white py-1 px-2" style="font-size: 0.7rem;">
                             <i class="bi bi-eye"></i> Detail
                         </a>
-                        <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-sm btn-warning">
+                        <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning py-1 px-2" style="font-size: 0.7rem;">
                             <i class="bi bi-pencil"></i> Edit
                         </a>
 
@@ -264,12 +259,12 @@
                             class="d-inline delete-form">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-sm btn-danger w-100 btn-delete" 
+                            <button type="button" class="btn btn-danger py-1 px-2 btn-delete" 
+                                    style="font-size: 0.7rem;"
                                     data-judul="{{ $buku->judul }}">
                                 <i class="bi bi-trash"></i> Hapus
                             </button>
                         </form>
-
                     </div>
                 </div>
             </div>
