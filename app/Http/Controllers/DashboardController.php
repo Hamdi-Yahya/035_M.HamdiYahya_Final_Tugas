@@ -19,8 +19,17 @@ class DashboardController extends Controller
             'sedang_dipinjam'   => Transaksi::where('status', 'Dipinjam')->count(),
             'terlambat'         => Transaksi::where('status', 'Dipinjam')
                                             ->where('tanggal_kembali', '<', now())->count(),
+            /* Denda bulan ini: gabungan denda tercatat (sudah dikembalikan bulan ini) + estimasi denda berjalan (terlambat & belum dikembalikan) */
             'denda_bulan_ini'   => Transaksi::whereMonth('tanggal_dikembalikan', now()->month)
-                                            ->sum('denda'),
+                                            ->whereYear('tanggal_dikembalikan', now()->year)
+                                            ->sum('denda')
+                                  + Transaksi::where('status', 'Dipinjam')
+                                            ->where('tanggal_kembali', '<', now())
+                                            ->get()
+                                            ->sum(function ($trx) {
+                                                /* Hitung jumlah hari terlambat x tarif denda Rp 5.000/hari */
+                                                return intval($trx->tanggal_kembali->diffInDays(now())) * 5000;
+                                            }),
             'transaksi_hari_ini'=> Transaksi::whereDate('tanggal_pinjam', today())->count(),
             'buku_tersedia'     => Buku::where('stok', '>', 0)->count(),
         ];
