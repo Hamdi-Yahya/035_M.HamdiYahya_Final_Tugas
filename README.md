@@ -119,7 +119,7 @@ Halaman laporan dengan filter (range tanggal, status, anggota), ringkasan statis
 ---
 
 ### 6. Halaman Daftar Anggota
-Menampilkan seluruh data anggota dalam format tabel dengan statistik (Total, Aktif, Nonaktif), filter advanced (keyword, jenis kelamin, status, pekerjaan, range umur), serta tombol aksi pada setiap baris
+Menampilkan seluruh data anggota dalam format tabel dengan statistik (Total, Aktif, Nonaktif), filter advanced (keyword, jenis kelamin, status, pekerjaan, range umur)
 
 ![Daftar Anggota](image/6.png)
 
