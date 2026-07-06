@@ -7,12 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                <h1 class="mb-0">
                     <i class="bi bi-arrow-left-right"></i>
                     Daftar Transaksi Peminjaman
                 </h1>
-                <div class="d-flex gap-2">
+                <div class="d-flex flex-column flex-md-row gap-2">
                     <a href="{{ route('transaksi.laporan') }}" class="btn btn-danger">
                         <i class="bi bi-file-earmark-pdf"></i> Laporan
                     </a>
@@ -88,8 +88,8 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('transaksi.show', $transaksi->id) }}" 
-                                           class="btn btn-sm btn-info text-white">
-                                            <i class="bi bi-eye"></i>
+                                           class="btn btn-sm btn-info text-white d-inline-flex align-items-center justify-content-center">
+                                            <i class="bi bi-eye"></i> <span class="d-inline d-md-none ms-1">Detail</span>
                                         </a>
                                     </td>
                                 </tr>

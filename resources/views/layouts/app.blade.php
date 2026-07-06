@@ -22,6 +22,34 @@
 
         <!-- Stack untuk styles tambahan dari child view -->
         @stack('styles')
+        <style>
+            /* Responsive Touch-friendly Adjustments (min 44x44px for touch targets) */
+            @media (max-width: 767.98px) {
+                .btn, .form-control, .form-select, .page-link {
+                    min-height: 44px;
+                }
+                .btn {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                /* Mengatasi masalah responsive tables di mobile */
+                .table-responsive {
+                    border: 0;
+                }
+                .btn-sm {
+                    min-height: 44px;
+                    font-size: 0.875rem !important;
+                    padding-top: 0.5rem;
+                    padding-bottom: 0.5rem;
+                }
+                /* Fix icon centering */
+                .btn i.bi {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

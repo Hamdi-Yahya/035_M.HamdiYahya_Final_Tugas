@@ -7,12 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <h1 class="mb-0">
         <i class="bi bi-people"></i>
         Daftar Anggota
     </h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex flex-column flex-md-row gap-2">
         {{-- Tombol Export Excel --}}
         <a href="{{ route('anggota.export') }}" class="btn btn-success">
             <i class="bi bi-file-excel"></i> Export Excel
@@ -112,12 +112,12 @@
                            placeholder="Umur Max" value="{{ request('umur_max') }}">
                 </div>
 
-                <div class="col-md-3 d-flex align-items-end gap-2">
+                <div class="col-md-3 d-flex align-items-end gap-2 mt-3 mt-md-0">
                     <button type="submit" class="btn btn-primary flex-fill">
-                        <i class="bi bi-search"></i> Cari
+                        <i class="bi bi-search me-1"></i> Cari
                     </button>
-                    <a href="{{ route('anggota.index') }}" class="btn btn-outline-secondary flex-fill">
-                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    <a href="{{ route('anggota.index') }}" class="btn btn-outline-secondary flex-fill text-center d-flex align-items-center justify-content-center">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                     </a>
                 </div>
             </div>
@@ -180,29 +180,27 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="d-grid gap-1">
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('anggota.show', $anggota->id) }}" 
-                                           class="btn btn-sm btn-info text-white"
-                                           title="Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('anggota.edit', $anggota->id) }}" 
-                                           class="btn btn-sm btn-warning"
-                                           title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                    </div>
+                                <div class="d-flex flex-column flex-md-row gap-1">
+                                    <a href="{{ route('anggota.show', $anggota->id) }}" 
+                                       class="btn btn-sm btn-info text-white flex-fill d-flex align-items-center justify-content-center"
+                                       title="Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('anggota.edit', $anggota->id) }}" 
+                                       class="btn btn-sm btn-warning flex-fill d-flex align-items-center justify-content-center"
+                                       title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
 
                                     {{-- Delete Button dengan SweetAlert --}}
                                     <form action="{{ route('anggota.destroy', $anggota->id) }}" 
                                           method="POST"
-                                          class="d-inline delete-form">
+                                          class="d-inline delete-form flex-fill">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-sm btn-danger w-100 btn-delete" 
-                                                data-nama="{{ $anggota->nama }}">
-                                            <i class="bi bi-trash"></i> Hapus
+                                        <button type="button" class="btn btn-sm btn-danger w-100 btn-delete d-flex align-items-center justify-content-center" 
+                                                data-nama="{{ $anggota->nama }}" title="Hapus">
+                                            <i class="bi bi-trash"></i> <span class="d-inline d-md-none ms-1">Hapus</span>
                                         </button>
                                     </form>
                                 </div>

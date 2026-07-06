@@ -11,7 +11,7 @@
             {{-- Header ringkasan pencarian --}}
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body py-4">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                         <div>
                             <h4 class="mb-1 fw-bold">
                                 <i class="bi bi-search me-2 text-primary"></i>
@@ -22,9 +22,9 @@
                             </p>
                         </div>
                         {{-- Form pencarian ulang --}}
-                        <form action="{{ route('search') }}" method="GET" class="d-flex gap-2" style="min-width: 300px;">
-                            <input type="text" name="q" class="form-control" placeholder="Cari lagi..." value="{{ $keyword }}">
-                            <button type="submit" class="btn btn-primary">
+                        <form action="{{ route('search') }}" method="GET" class="d-flex gap-2 w-100 w-md-auto" style="max-width: 400px;">
+                            <input type="text" name="q" class="form-control flex-grow-1" placeholder="Cari lagi..." value="{{ $keyword }}">
+                            <button type="submit" class="btn btn-primary px-3 d-flex align-items-center justify-content-center">
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
@@ -56,22 +56,22 @@
             </div>
 
             {{-- Tab navigasi --}}
-            <ul class="nav nav-pills mb-4 gap-2" id="searchTabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-buku">
-                        <i class="bi bi-book"></i> Buku
+            <ul class="nav nav-pills mb-4 gap-2 flex-column flex-sm-row" id="searchTabs" role="tablist">
+                <li class="nav-item flex-sm-fill text-sm-center">
+                    <a class="nav-link active d-flex justify-content-between justify-content-sm-center align-items-center gap-2 h-100" data-bs-toggle="tab" href="#tab-buku">
+                        <span><i class="bi bi-book"></i> Buku</span>
                         <span class="badge bg-primary rounded-pill">{{ $results['buku']->count() }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-anggota">
-                        <i class="bi bi-people"></i> Anggota
+                <li class="nav-item flex-sm-fill text-sm-center">
+                    <a class="nav-link d-flex justify-content-between justify-content-sm-center align-items-center gap-2 h-100" data-bs-toggle="tab" href="#tab-anggota">
+                        <span><i class="bi bi-people"></i> Anggota</span>
                         <span class="badge bg-success rounded-pill">{{ $results['anggota']->count() }}</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-transaksi">
-                        <i class="bi bi-receipt"></i> Transaksi
+                <li class="nav-item flex-sm-fill text-sm-center">
+                    <a class="nav-link d-flex justify-content-between justify-content-sm-center align-items-center gap-2 h-100" data-bs-toggle="tab" href="#tab-transaksi">
+                        <span><i class="bi bi-receipt"></i> Transaksi</span>
                         <span class="badge bg-warning text-dark rounded-pill">{{ $results['transaksi']->count() }}</span>
                     </a>
                 </li>
@@ -85,9 +85,9 @@
                     @forelse($results['buku'] as $buku)
                     <div class="card mb-3 border-0 shadow-sm search-result-card" style="animation: fadeInUp 0.3s ease {{ $loop->index * 0.05 }}s both;">
                         <div class="card-body">
-                            <div class="row align-items-center">
+                            <div class="row align-items-center g-3">
                                 {{-- Ikon buku --}}
-                                <div class="col-auto">
+                                <div class="col-auto d-none d-sm-block">
                                     <div class="rounded d-flex align-items-center justify-content-center bg-primary bg-opacity-10" style="width: 60px; height: 70px;">
                                         <i class="bi bi-book-fill fs-2 text-primary"></i>
                                     </div>
@@ -120,9 +120,9 @@
                                     </div>
                                 </div>
                                 {{-- Tombol aksi --}}
-                                <div class="col-auto">
-                                    <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Detail
+                                <div class="col-12 col-sm-auto mt-3 mt-sm-0 text-sm-end text-center">
+                                    <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-outline-primary w-100 w-sm-auto d-inline-flex align-items-center justify-content-center">
+                                        <i class="bi bi-eye me-1"></i> Detail
                                     </a>
                                 </div>
                             </div>
@@ -143,9 +143,9 @@
                     @forelse($results['anggota'] as $anggota)
                     <div class="card mb-3 border-0 shadow-sm search-result-card" style="animation: fadeInUp 0.3s ease {{ $loop->index * 0.05 }}s both;">
                         <div class="card-body">
-                            <div class="row align-items-center">
+                            <div class="row align-items-center g-3">
                                 {{-- Avatar anggota --}}
-                                <div class="col-auto">
+                                <div class="col-auto d-none d-sm-block">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10" style="width: 55px; height: 55px;">
                                         <i class="bi bi-person-fill fs-3 text-success"></i>
                                     </div>
@@ -173,9 +173,9 @@
                                     </div>
                                 </div>
                                 {{-- Tombol aksi --}}
-                                <div class="col-auto">
-                                    <a href="{{ route('anggota.show', $anggota->id) }}" class="btn btn-sm btn-outline-success">
-                                        <i class="bi bi-eye"></i> Detail
+                                <div class="col-12 col-sm-auto mt-3 mt-sm-0 text-sm-end text-center">
+                                    <a href="{{ route('anggota.show', $anggota->id) }}" class="btn btn-sm btn-outline-success w-100 w-sm-auto d-inline-flex align-items-center justify-content-center">
+                                        <i class="bi bi-eye me-1"></i> Detail
                                     </a>
                                 </div>
                             </div>
@@ -196,9 +196,9 @@
                     @forelse($results['transaksi'] as $trx)
                     <div class="card mb-3 border-0 shadow-sm search-result-card" style="animation: fadeInUp 0.3s ease {{ $loop->index * 0.05 }}s both;">
                         <div class="card-body">
-                            <div class="row align-items-center">
+                            <div class="row align-items-center g-3">
                                 {{-- Ikon transaksi --}}
-                                <div class="col-auto">
+                                <div class="col-auto d-none d-sm-block">
                                     <div class="rounded d-flex align-items-center justify-content-center bg-warning bg-opacity-10" style="width: 55px; height: 55px;">
                                         <i class="bi bi-receipt fs-3 text-warning"></i>
                                     </div>
@@ -220,9 +220,9 @@
                                     </div>
                                 </div>
                                 {{-- Tombol aksi --}}
-                                <div class="col-auto">
-                                    <a href="{{ route('transaksi.show', $trx->id) }}" class="btn btn-sm btn-outline-warning text-dark">
-                                        <i class="bi bi-eye"></i> Detail
+                                <div class="col-12 col-sm-auto mt-3 mt-sm-0 text-sm-end text-center">
+                                    <a href="{{ route('transaksi.show', $trx->id) }}" class="btn btn-sm btn-outline-warning text-dark w-100 w-sm-auto d-inline-flex align-items-center justify-content-center">
+                                        <i class="bi bi-eye me-1"></i> Detail
                                     </a>
                                 </div>
                             </div>

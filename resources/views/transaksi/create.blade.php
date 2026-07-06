@@ -106,12 +106,12 @@
                                 <hr>
 
                                 {{-- Buttons --}}
-                                <div class="d-flex justify-content-between">
-                                    <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">
-                                        <i class="bi bi-arrow-left"></i> Kembali
+                                <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mt-4">
+                                    <a href="{{ route('transaksi.index') }}" class="btn btn-secondary order-2 order-md-1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-arrow-left me-1"></i> Kembali
                                     </a>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> Proses Peminjaman
+                                    <button type="submit" class="btn btn-primary order-1 order-md-2 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-save me-1"></i> Proses Peminjaman
                                     </button>
                                 </div>
                             </form>

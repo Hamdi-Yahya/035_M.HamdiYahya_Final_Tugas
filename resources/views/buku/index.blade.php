@@ -7,14 +7,14 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <h1 class="mb-0">
         <i class="bi bi-book"></i>
         Daftar Buku
     </h1>
-        <div class="d-flex gap-2">
+    <div class="d-flex flex-column flex-md-row gap-2">
         <button type="submit" form="bulk-delete-form" class="btn btn-danger" id="btn-bulk-delete" style="display: none;">
-            <i class="bi bi-trash"></i> Hapus Terpilih (<span id="selected-count">0</span>)
+            <i class="bi bi-trash me-1"></i> Hapus Terpilih (<span id="selected-count">0</span>)
         </button>
         {{-- Tombol Export CSV --}}
         <a href="{{ route('buku.export') }}" class="btn btn-success">
@@ -138,12 +138,12 @@
                 </div>
 
                 <!-- Tombol Aksi -->
-                <div class="col-md-2 d-flex align-items-end gap-2">
+                <div class="col-md-2 d-flex align-items-end gap-2 mt-3 mt-md-0">
                     <button type="submit" class="btn btn-primary flex-fill">
-                        <i class="bi bi-search"></i> Cari
+                        <i class="bi bi-search me-1"></i> Cari
                     </button>
-                    <a href="{{ route('buku.index') }}" class="btn btn-outline-secondary flex-fill">
-                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    <a href="{{ route('buku.index') }}" class="btn btn-outline-secondary flex-fill text-center d-flex align-items-center justify-content-center">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                     </a>
                 </div>
             </div>
@@ -190,14 +190,14 @@
 @forelse ($bukus as $buku)
     <div class="card mb-3 border-0 shadow-sm">
         <div class="card-body py-3">
-            <div class="row align-items-center">
+            <div class="row align-items-center g-3">
                 {{-- Checkbox di paling kiri, sejajar tengah vertikal --}}
                 <div class="col-auto pe-0">
-                    <input type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" class="form-check-input buku-checkbox">
+                    <input type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" class="form-check-input buku-checkbox" style="transform: scale(1.3);">
                 </div>
 
                 {{-- Ikon buku dan badge kategori --}}
-                <div class="col-auto text-center" style="width: 80px;">
+                <div class="col-auto text-center d-none d-sm-block" style="width: 80px;">
                     <i class="bi bi-book text-primary" style="font-size: 2.5rem;"></i>
                     <div class="mt-1">
                         <span class="badge bg-primary" style="font-size: 0.65rem;">
@@ -207,7 +207,7 @@
                 </div>
                 
                 {{-- Informasi buku --}}
-                <div class="col">
+                <div class="col-12 col-md">
                     <h6 class="card-title mb-1 fw-bold">
                         <a href="{{ route('buku.show', $buku->id) }}" class="text-decoration-none">
                             {{ $buku->judul }}
@@ -234,35 +234,43 @@
                 </div>
                 
                 {{-- Harga, stok, dan tombol aksi --}}
-                <div class="col-auto text-end">
-                    <h5 class="text-primary mb-1 fw-bold">{{ $buku->harga_format }}</h5>
+                <div class="col-12 col-md-auto text-md-end text-start mt-3 mt-md-0 border-top border-md-0 pt-3 pt-md-0">
+                    <div class="d-flex flex-md-column justify-content-between align-items-md-end align-items-center mb-3 mb-md-0">
+                        <div>
+                            <h5 class="text-primary mb-1 fw-bold">{{ $buku->harga_format }}</h5>
 
-                    @if ($buku->stok > 0)
-                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Tersedia</span>
-                        <div class="text-muted small mb-2">Stok: {{ $buku->stok }} buku</div>
-                    @else
-                        <span class="badge bg-danger mb-2"><i class="bi bi-x-circle"></i> Habis</span>
-                    @endif
+                            @if ($buku->stok > 0)
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Tersedia</span>
+                                <span class="text-muted small ms-1 d-md-block d-inline-block">Stok: {{ $buku->stok }} buku</span>
+                            @else
+                                <span class="badge bg-danger mb-2"><i class="bi bi-x-circle"></i> Habis</span>
+                            @endif
+                        </div>
+                        <div class="d-sm-none text-center">
+                            <span class="badge bg-primary" style="font-size: 0.75rem;">
+                                {{ $buku->kategori_rel->nama_kategori ?? $buku->kategori ?? 'Umum' }}
+                            </span>
+                        </div>
+                    </div>
                     
                     {{-- Tombol aksi horizontal compact --}}
-                    <div class="d-flex gap-1 justify-content-end">
-                        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-info text-white py-1 px-2" style="font-size: 0.7rem;">
-                            <i class="bi bi-eye"></i> Detail
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-end justify-content-start mt-2 mt-md-0">
+                        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-info text-white btn-sm flex-fill flex-md-grow-0 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-eye me-1"></i> Detail
                         </a>
-                        <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning py-1 px-2" style="font-size: 0.7rem;">
-                            <i class="bi bi-pencil"></i> Edit
+                        <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning btn-sm flex-fill flex-md-grow-0 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-pencil me-1"></i> Edit
                         </a>
 
                         {{-- Delete Button dengan SweetAlert --}}
                         <form action="{{ route('buku.destroy', $buku->id) }}" 
                             method="POST" 
-                            class="d-inline delete-form">
+                            class="d-inline delete-form flex-fill flex-md-grow-0">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-danger py-1 px-2 btn-delete" 
-                                    style="font-size: 0.7rem;"
+                            <button type="button" class="btn btn-danger btn-sm btn-delete w-100 d-flex align-items-center justify-content-center" 
                                     data-judul="{{ $buku->judul }}">
-                                <i class="bi bi-trash"></i> Hapus
+                                <i class="bi bi-trash me-1"></i> Hapus
                             </button>
                         </form>
                     </div>

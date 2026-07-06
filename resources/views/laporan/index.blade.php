@@ -38,16 +38,18 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-filter"></i> Filter
+                    <div class="col-12 d-flex flex-column flex-md-row gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center">
+                            <i class="bi bi-filter me-1"></i> Filter
                         </button>
-                        <a href="{{ route('laporan.index') }}" class="btn btn-secondary">Reset</a>
-                        <a href="{{ route('laporan.export-pdf', request()->query()) }}" class="btn btn-danger">
-                            <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                        <a href="{{ route('laporan.index') }}" class="btn btn-secondary d-flex align-items-center justify-content-center">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </a>
-                        <button type="button" class="btn btn-success" onclick="window.print()">
-                            <i class="bi bi-printer"></i> Cetak
+                        <a href="{{ route('laporan.export-pdf', request()->query()) }}" class="btn btn-danger d-flex align-items-center justify-content-center">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+                        </a>
+                        <button type="button" class="btn btn-success d-flex align-items-center justify-content-center" onclick="window.print()">
+                            <i class="bi bi-printer me-1"></i> Cetak
                         </button>
                     </div>
                 </form>

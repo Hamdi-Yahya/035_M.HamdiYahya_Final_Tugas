@@ -94,32 +94,36 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Kembali
+                    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mt-4">
+                        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary order-2 order-md-1 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali
                         </a>
 
                         @if($transaksi->status == 'Dipinjam')
-                            <button type="button" class="btn btn-success" id="btn-kembalikan">
-                                <i class="bi bi-arrow-return-left"></i> Kembalikan Buku
-                            </button>
+                            <div class="order-1 order-md-2">
+                                <button type="button" class="btn btn-success w-100 d-flex align-items-center justify-content-center" id="btn-kembalikan">
+                                    <i class="bi bi-arrow-return-left me-1"></i> Kembalikan Buku
+                                </button>
+                            </div>
                         
                             <form id="form-kembalikan" action="{{ route('transaksi.kembalikan', $transaksi->id) }}" method="POST" class="d-none">
                                 @csrf
                                 @method('PATCH')
                             </form>
                         @else
-                            @if($transaksi->tanggal_dikembalikan <= $transaksi->tanggal_kembali)
-                                <div class="alert alert-success">
-                                    <i class="bi bi-check-circle"></i> Dikembalikan tepat waktu pada
-                                    {{ $transaksi->tanggal_dikembalikan->format('d M Y') }}
-                                </div>
-                            @else
-                                <div class="alert alert-warning">
-                                    <i class="bi bi-exclamation-triangle"></i> Terlambat dikembalikan!
-                                    Denda: Rp {{ number_format($transaksi->denda, 0, ',', '.') }}
-                                </div>
-                            @endif
+                            <div class="order-1 order-md-2 flex-grow-1 text-md-end">
+                                @if($transaksi->tanggal_dikembalikan <= $transaksi->tanggal_kembali)
+                                    <div class="alert alert-success mb-0 d-inline-block text-start w-100">
+                                        <i class="bi bi-check-circle"></i> Dikembalikan tepat waktu pada
+                                        {{ $transaksi->tanggal_dikembalikan->format('d M Y') }}
+                                    </div>
+                                @else
+                                    <div class="alert alert-warning mb-0 d-inline-block text-start w-100">
+                                        <i class="bi bi-exclamation-triangle"></i> Terlambat dikembalikan!
+                                        Denda: Rp {{ number_format($transaksi->denda, 0, ',', '.') }}
+                                    </div>
+                                @endif
+                            </div>
                         @endif
                     </div>
 
