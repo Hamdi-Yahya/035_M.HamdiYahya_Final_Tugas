@@ -140,10 +140,10 @@
                 <!-- Tombol Aksi -->
                 <div class="col-md-2 d-flex align-items-end gap-2 mt-3 mt-md-0">
                     <button type="submit" class="btn btn-primary flex-fill">
-                        <i class="bi bi-search me-1"></i> Cari
+                        <i class="bi bi-search me-1"></i> {{ __('Cari') }}
                     </button>
                     <a href="{{ route('buku.index') }}" class="btn btn-outline-secondary flex-fill text-center d-flex align-items-center justify-content-center">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> {{ __('Reset') }}
                     </a>
                 </div>
             </div>
@@ -256,10 +256,10 @@
                     {{-- Tombol aksi horizontal compact --}}
                     <div class="d-flex flex-wrap gap-2 justify-content-md-end justify-content-start mt-2 mt-md-0">
                         <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-info text-white btn-sm flex-fill flex-md-grow-0 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-eye me-1"></i> Detail
+                            <i class="bi bi-eye me-1"></i> {{ __('Detail') }}
                         </a>
                         <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning btn-sm flex-fill flex-md-grow-0 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-pencil me-1"></i> Edit
+                            <i class="bi bi-pencil me-1"></i> {{ __('Edit') }}
                         </a>
 
                         {{-- Delete Button dengan SweetAlert --}}
@@ -270,7 +270,7 @@
                             @method('DELETE')
                             <button type="button" class="btn btn-danger btn-sm btn-delete w-100 d-flex align-items-center justify-content-center" 
                                     data-judul="{{ $buku->judul }}">
-                                <i class="bi bi-trash me-1"></i> Hapus
+                                <i class="bi bi-trash me-1"></i> {{ __('Hapus') }}
                             </button>
                         </form>
                     </div>

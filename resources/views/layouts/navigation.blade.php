@@ -41,10 +41,28 @@
                             </svg>
                         </span>
                         <input type="search" name="q" value="{{ request('q') }}"
-                               placeholder="Cari buku, anggota, transaksi..."
+                               placeholder="{{ __('Cari') }}..."
                                class="w-64 pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out" />
                     </div>
                 </form>
+
+                {{-- Language Switcher & Dark Mode Toggle --}}
+                <div class="flex items-center gap-2">
+                    @if(app()->getLocale() == 'id')
+                        <a href="{{ route('lang.switch', 'en') }}" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 font-bold text-xs" title="Switch to English">
+                            EN
+                        </a>
+                    @else
+                        <a href="{{ route('lang.switch', 'id') }}" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 font-bold text-xs" title="Ganti ke Bahasa Indonesia">
+                            ID
+                        </a>
+                    @endif
+
+                    <button id="darkModeToggle" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <i class="bi bi-moon-fill" id="moonIcon"></i>
+                        <i class="bi bi-sun-fill" id="sunIcon" style="display: none;"></i>
+                    </button>
+                </div>
 
                 {{-- Admin Dropdown --}}
                 <x-dropdown align="right" width="48">
@@ -118,9 +136,22 @@
                         </svg>
                     </span>
                     <input type="search" name="q" value="{{ request('q') }}"
-                           placeholder="Cari buku, anggota, transaksi..."
+                           placeholder="{{ __('Cari') }}..."
                            class="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
                 </form>
+            </div>
+            
+            {{-- Mobile Language Switcher & Dark Mode Toggle --}}
+            <div class="px-4 pt-4 pb-2 flex gap-3">
+                @if(app()->getLocale() == 'id')
+                    <a href="{{ route('lang.switch', 'en') }}" class="btn btn-sm btn-outline-secondary flex-fill">English</a>
+                @else
+                    <a href="{{ route('lang.switch', 'id') }}" class="btn btn-sm btn-outline-secondary flex-fill">Indonesia</a>
+                @endif
+                <button id="darkModeToggleMobile" class="btn btn-sm btn-outline-secondary flex-fill">
+                    <i class="bi bi-moon-fill" id="moonIconMobile"></i>
+                    <i class="bi bi-sun-fill" id="sunIconMobile" style="display: none;"></i> Mode
+                </button>
             </div>
         </div>
  
@@ -150,3 +181,50 @@
         </div>
     </div>
 </nav>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('darkModeToggle');
+    const toggleBtnMobile = document.getElementById('darkModeToggleMobile');
+    const moonIcon = document.getElementById('moonIcon');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIconMobile = document.getElementById('moonIconMobile');
+    const sunIconMobile = document.getElementById('sunIconMobile');
+    
+    // Function to update icon based on theme
+    function updateIcon(theme) {
+        if (theme === 'dark') {
+            if(moonIcon) moonIcon.style.display = 'none';
+            if(sunIcon) sunIcon.style.display = 'inline-block';
+            if(moonIconMobile) moonIconMobile.style.display = 'none';
+            if(sunIconMobile) sunIconMobile.style.display = 'inline-block';
+        } else {
+            if(moonIcon) moonIcon.style.display = 'inline-block';
+            if(sunIcon) sunIcon.style.display = 'none';
+            if(moonIconMobile) moonIconMobile.style.display = 'inline-block';
+            if(sunIconMobile) sunIconMobile.style.display = 'none';
+        }
+    }
+    
+    // Initialize icon
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    updateIcon(currentTheme);
+    
+    // Toggle function
+    function toggleTheme() {
+        const theme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-bs-theme');
+        }
+        localStorage.setItem('theme', theme);
+        updateIcon(theme);
+    }
+    
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleTheme);
+    if (toggleBtnMobile) toggleBtnMobile.addEventListener('click', toggleTheme);
+});
+</script>
+@endpush

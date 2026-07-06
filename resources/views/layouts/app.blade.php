@@ -49,7 +49,25 @@
                     align-items: center;
                 }
             }
+
+            /* Dark Mode Overrides */
+            html[data-bs-theme="dark"] body { background-color: #212529 !important; color: #f8f9fa !important; }
+            html[data-bs-theme="dark"] .bg-white { background-color: #2b3035 !important; }
+            html[data-bs-theme="dark"] .bg-gray-50 { background-color: #212529 !important; }
+            html[data-bs-theme="dark"] .bg-gray-100 { background-color: #212529 !important; }
+            html[data-bs-theme="dark"] .text-gray-800 { color: #f8f9fa !important; }
+            html[data-bs-theme="dark"] .text-gray-500 { color: #adb5bd !important; }
+            html[data-bs-theme="dark"] .border-gray-100, 
+            html[data-bs-theme="dark"] .border-gray-200, 
+            html[data-bs-theme="dark"] .border-gray-300,
+            html[data-bs-theme="dark"] .border-b { border-color: #495057 !important; }
+            html[data-bs-theme="dark"] .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important; }
         </style>
+        <script>
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

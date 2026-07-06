@@ -11,14 +11,14 @@
             {{-- SECTION 1: Statistics Cards (8 kartu dari ketentuan) --}}
             <div class="row g-3 mb-4">
                 @foreach([
-                    ['Total Buku', $stats['total_buku'], 'bi-book', 'primary'],
-                    ['Anggota Aktif', $stats['total_anggota'], 'bi-people', 'success'],
-                    ['Sedang Dipinjam', $stats['sedang_dipinjam'], 'bi-journal-arrow-up', 'info'],
-                    ['Terlambat', $stats['terlambat'], 'bi-exclamation-triangle', 'danger'],
-                    ['Transaksi Hari Ini', $stats['transaksi_hari_ini'], 'bi-calendar-check', 'warning'],
-                    ['Buku Tersedia', $stats['buku_tersedia'], 'bi-bookshelf', 'secondary'],
-                    ['Total Transaksi', $stats['total_transaksi'], 'bi-receipt', 'dark'],
-                    ['Denda Bulan Ini', 'Rp ' . number_format($stats['denda_bulan_ini'], 0, ',', '.'), 'bi-cash', 'danger'],
+                    [__('Total Buku'), $stats['total_buku'], 'bi-book', 'primary'],
+                    [__('Anggota Aktif'), $stats['total_anggota'], 'bi-people', 'success'],
+                    [__('Sedang Dipinjam'), $stats['sedang_dipinjam'], 'bi-journal-arrow-up', 'info'],
+                    [__('Terlambat'), $stats['terlambat'], 'bi-exclamation-triangle', 'danger'],
+                    [__('Transaksi Hari Ini'), $stats['transaksi_hari_ini'], 'bi-calendar-check', 'warning'],
+                    [__('Buku Tersedia'), $stats['buku_tersedia'], 'bi-bookshelf', 'secondary'],
+                    [__('Total Transaksi'), $stats['total_transaksi'], 'bi-receipt', 'info'],
+                    [__('Denda Bulan Ini'), 'Rp ' . number_format($stats['denda_bulan_ini'], 0, ',', '.'), 'bi-cash', 'danger'],
                 ] as [$label, $value, $icon, $color])
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-{{ $color }} h-100">
@@ -40,7 +40,7 @@
                 <div class="col-lg-8 mb-4 mb-lg-0">
                     <div class="card h-100">
                         <div class="card-header">
-                            <i class="bi bi-graph-up me-1"></i> Transaksi 6 Bulan Terakhir
+                            <i class="bi bi-graph-up me-1"></i> {{ __('Transaksi 6 Bulan Terakhir') }}
                         </div>
                         <div class="card-body">
                             <canvas id="chartTransaksi" height="100"></canvas>
@@ -51,7 +51,7 @@
                 <div class="col-lg-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <i class="bi bi-pie-chart me-1"></i> Top 5 Buku Populer
+                            <i class="bi bi-pie-chart me-1"></i> {{ __('Top 5 Buku Populer') }}
                         </div>
                         <div class="card-body">
                             <canvas id="chartBuku" height="200"></canvas>
@@ -65,7 +65,7 @@
                 <div class="col-lg-8 mb-4 mb-lg-0">
                     <div class="card h-100">
                         <div class="card-header">
-                            <i class="bi bi-bar-chart me-1"></i> Top 5 Buku Terpopuler
+                            <i class="bi bi-bar-chart me-1"></i> {{ __('Top 5 Buku Populer') }}
                         </div>
                         <div class="card-body">
                             <canvas id="chartBar" height="100"></canvas>
@@ -75,7 +75,7 @@
                 <div class="col-lg-4">
                     <div class="card h-100">
                         <div class="card-header">
-                            <i class="bi bi-circle-half me-1"></i> Status Transaksi
+                            <i class="bi bi-circle-half me-1"></i> {{ __('Status Transaksi') }}
                         </div>
                         <div class="card-body">
                             <canvas id="chartDonut" height="200"></canvas>
@@ -93,7 +93,7 @@
                             <svg class="inline h-6 w-6 text-red-600 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Buku Terlambat
+                            {{ __('Buku Terlambat') }}
                         </h3>
                         <span class="px-3 py-1 text-sm font-bold rounded-full bg-red-100 text-red-800">
                             {{ $transaksiTerlambat->count() }} transaksi
@@ -140,31 +140,31 @@
             {{-- SECTION 4: Quick Actions (dari dashboard lama) --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold mb-4">Aksi Cepat</h3>
+                    <h3 class="text-lg font-semibold mb-4">{{ __('Aksi Cepat') }}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <a href="{{ route('buku.create') }}" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
                             <svg class="h-8 w-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            <span class="font-medium text-blue-900">Tambah Buku</span>
+                            <span class="font-medium text-blue-900">{{ __('Tambah Buku') }}</span>
                         </a>
                         <a href="{{ route('anggota.create') }}" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition">
                             <svg class="h-8 w-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                             </svg>
-                            <span class="font-medium text-green-900">Tambah Anggota</span>
+                            <span class="font-medium text-green-900">{{ __('Tambah Anggota') }}</span>
                         </a>
                         <a href="{{ route('transaksi.create') }}" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
                             <svg class="h-8 w-8 text-yellow-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                             </svg>
-                            <span class="font-medium text-yellow-900">Pinjam Buku</span>
+                            <span class="font-medium text-yellow-900">{{ __('Pinjam Buku') }}</span>
                         </a>
                         <a href="{{ route('transaksi.index') }}" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
                             <svg class="h-8 w-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
-                            <span class="font-medium text-purple-900">Lihat Transaksi</span>
+                            <span class="font-medium text-purple-900">{{ __('Lihat Transaksi') }}</span>
                         </a>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted">Belum ada transaksi</td>
+                                <td colspan="5" class="text-center text-muted">{{ __('Belum ada transaksi') }}</td>
                             </tr>
                             @endforelse
                         </tbody>
