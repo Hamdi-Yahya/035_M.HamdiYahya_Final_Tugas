@@ -86,6 +86,8 @@ Aplikasi web manajemen perpustakaan berbasis **Laravel 12** yang dirancang untuk
 Halaman utama yang menampilkan 8 kartu statistik, 4 chart interaktif (Line, Pie, Bar, Donut), tabel buku terlambat, transaksi terbaru, serta tombol aksi cepat.
 
 ![Dashboard](image/1.png)
+![Dashboard](image/11.png)
+![Dashboard](image/111.png)
 
 ---
 
