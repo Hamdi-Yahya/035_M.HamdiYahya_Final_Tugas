@@ -87,7 +87,6 @@ Halaman utama yang menampilkan 8 kartu statistik, 4 chart interaktif (Line, Pie,
 
 ![Dashboard](image/1.png)
 ![Dashboard](image/11.png)
-![Dashboard](image/111.png)
 
 ---
 
